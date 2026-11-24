@@ -1,4 +1,4 @@
-"""Manda comandos al DSP del ESP32 (firmware boombox/prueba_bt) por el
+"""Manda comandos al DSP del ESP32 (firmware/tuneamp32) por el
 puerto serie USB, sin reiniciar la placa.
 
 Necesita:  pip install pyserial

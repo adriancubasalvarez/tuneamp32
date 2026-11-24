@@ -1,7 +1,7 @@
 {
   "nombre": "jvc_cerca_I_agujero_abierto",
   "tipo": "cerca",
-  "archivo": "grabaciones\\jvc_cerca_I_agujero_abierto.wav",
+  "archivo": "jvc_cerca_I_agujero_abierto.wav",
   "canal": 0,
   "fs": 48000,
   "pico_dbfs": -10.908573382627043,

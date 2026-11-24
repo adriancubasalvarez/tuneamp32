@@ -1,7 +1,7 @@
 {
   "nombre": "jvc_cerca_I_sin_dsp",
   "tipo": "cerca",
-  "archivo": "D:\\INTERNET RADIO ESP32\\boombox\\medidas\\grabaciones\\jvc_cerca_I_sin_dsp.wav",
+  "archivo": "jvc_cerca_I_sin_dsp.wav",
   "canal": 0,
   "fs": 48000,
   "pico_dbfs": -10.876988294593179,

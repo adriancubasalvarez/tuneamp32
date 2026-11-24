@@ -2,7 +2,7 @@
 
 *English first — versión en español más abajo.*
 
-Tools to measure the Radio Mundial Boombox speaker pods with an
+Tools to measure your speakers (first: the JVC CS-J520X pods) with an
 inexpensive wireless microphone (DJI Mic) and the Bluetooth test rig
 (ESP32 + PCM5102A + TPA3116D2). Only `numpy` and `matplotlib` are needed.
 
@@ -39,7 +39,7 @@ between measurements are reliable.
 
 ## En español
 
-Herramientas para medir las cápsulas del Radio Mundial Boombox con un
+Herramientas para medir tus altavoces (los primeros, las cápsulas JVC CS-J520X) con un
 micrófono inalámbrico barato (DJI Mic) y el montaje Bluetooth de prueba
 (ESP32 + PCM5102A + TPA3116D2). Solo hacen falta `numpy` y `matplotlib`.
 

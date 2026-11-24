@@ -516,7 +516,7 @@ def guardar(r):
             ("impulso", figura_impulso(r))]
     with PdfPages(carpeta / "informe.pdf") as pdf:
         portada = plt.figure(figsize=(10, 7.5))
-        portada.text(0.06, 0.94, "Radio Mundial Boombox — medida acústica", fontsize=16,
+        portada.text(0.06, 0.94, "TuneAmp32 — medida acústica", fontsize=16,
                      weight="bold", va="top")
         portada.text(0.06, 0.88, texto_resumen(r), fontsize=10, va="top", family="monospace")
         pdf.savefig(portada)

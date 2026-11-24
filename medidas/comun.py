@@ -1,6 +1,6 @@
 """Constantes y utilidades compartidas por generar_senales.py y analizar.py.
 
-Medidas acústicas del boombox de Radio Mundial (Fase M).
+Medidas acústicas de TuneAmp32.
 Solo necesita numpy (y matplotlib para los gráficos).
 """
 import pathlib

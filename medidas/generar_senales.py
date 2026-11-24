@@ -1,4 +1,4 @@
-"""Genera las señales de prueba para medir los altavoces del boombox.
+"""Genera las señales de prueba para medir los altavoces.
 
 Uso:  python generar_senales.py        (necesita numpy)
 

@@ -17,7 +17,7 @@ Uso:
       y abre el informe.
 
 Opciones de dispositivos (basta un trozo del nombre):
-  --salida "Radio Mundial"        altavoz Bluetooth del ESP32
+  --salida "TuneAmp32"        altavoz Bluetooth del ESP32
   --entrada "Wireless Microphone"  receptor del DJI Mic
 
 Antes de medir, el volumen de Windows para la salida Bluetooth al 100 %:
@@ -115,8 +115,8 @@ def comprobar_nivel(salida, entrada, canal, atenuacion):
 LISTA = """Revisa antes de repetir:
   1. Amplificador encendido y conectado, mando en su marca.
   2. Cable de la cápsula conectado al amplificador (canal correcto).
-  3. ESP32 alimentado y «Radio Mundial BT» en «Conectado – Música» en Windows.
-  4. Volumen de Windows para «Radio Mundial BT» en su valor de siempre.
+  3. ESP32 alimentado y «TuneAmp32» en «Conectado – Música» en Windows.
+  4. Volumen de Windows para «TuneAmp32» en su valor de siempre.
   5. Móvil sin Bluetooth (que no le quite la conexión al PC).
   6. Receptor y transmisor del DJI encendidos; micro a 1 cm del cono."""
 
@@ -144,7 +144,7 @@ def comprobar_sonido(salida, entrada, canal, atenuacion):
         return False
     if pico < -35:
         print(f"✗ Suena demasiado bajo (pico {pico:.1f} dBFS). Revisa el volumen de Windows para "
-              "«Radio Mundial BT» (se puede quedar bajo al reconectar el Bluetooth) y el mando "
+              "«TuneAmp32» (se puede quedar bajo al reconectar el Bluetooth) y el mando "
               "del amplificador, o baja --atenuacion.")
         return False
     if pico > -1:
@@ -187,7 +187,7 @@ def main():
     ap.add_argument("--nombre")
     ap.add_argument("--tipo", choices=("cerca", "lejos", "sala"), default="cerca")
     ap.add_argument("--canal", choices=("I", "D", "ambos"), default="I")
-    ap.add_argument("--salida", default="Radio Mundial")
+    ap.add_argument("--salida", default="TuneAmp32")
     ap.add_argument("--entrada", default="Wireless Microphone")
     ap.add_argument("--ventana", type=float, default=5.0)
     ap.add_argument("--sin-comprobar", action="store_true",

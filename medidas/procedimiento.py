@@ -1,4 +1,4 @@
-"""Genera PROCEDIMIENTO_MEDIDAS.pdf: cómo medir las cápsulas del boombox con
+"""Genera PROCEDIMIENTO_MEDIDAS.pdf: cómo medir las cápsulas de TuneAmp32 con
 el DJI Mic y el montaje Bluetooth de prueba.
 
 Uso:  python procedimiento.py      (necesita matplotlib)
@@ -18,7 +18,7 @@ AZUL, ROJO, GRIS = "#1f4e79", "#c00000", "#555555"
 
 def pagina(pdf, titulo, bloques, dibujo=None):
     fig = plt.figure(figsize=A4)
-    fig.text(0.07, 0.955, "Radio Mundial Boombox — medidas acústicas", fontsize=9, color=GRIS)
+    fig.text(0.07, 0.955, "TuneAmp32 — medidas acústicas", fontsize=9, color=GRIS)
     fig.text(0.07, 0.93, titulo, fontsize=16, weight="bold", color=AZUL, va="top")
     y = 0.885
     if dibujo:
@@ -142,7 +142,7 @@ def main():
         pagina(pdf, "3. Análisis en el PC", [
             ("Pasar las grabaciones", [
                 "• Conecta el transmisor DJI por USB-C y copia los WAV a",
-                "   boombox/medidas/grabaciones/ con el nombre de cada medida.",
+                "   medidas/grabaciones/ con el nombre de cada medida.",
                 "• Si lo prefieres, mándamelos y los analizo yo.",
             ]),
             ("Analizar", [

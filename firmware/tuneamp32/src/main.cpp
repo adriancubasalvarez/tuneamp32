@@ -1,19 +1,19 @@
 // =====================================================================
-// Radio Mundial Boombox — PRUEBA: altavoz Bluetooth con corrección DSP
+// TuneAmp32 — receptor Bluetooth con corrección DSP
 //
-// El ESP32 aparece como "Radio Mundial BT". Lo que llega por Bluetooth
+// El ESP32 aparece como "TuneAmp32". Lo que llega por Bluetooth
 // pasa por la corrección DSP (dsp.h) y sale por I2S (Inter-IC Sound) al
 // DAC PCM5102A y de ahí al amplificador TPA3116D2.
 //
 // Fase A: altavoz Bluetooth. Fase B: corrección DSP con refuerzo de
 // grave dinámico y limitador, ajustable por el puerto serie (115200
 // baudios). Escribe «ayuda» en el monitor serie, o usa
-// boombox/medidas/dsp.py desde el PC.
+// medidas/dsp.py desde el PC.
 //
-// Conexión (ver CONEXIONADO_PRUEBA_BT.pdf):
+// Conexión (ver hardware/README.md):
 //   DAC BCK -> GPIO 26   DAC LCK -> GPIO 25   DAC DIN -> GPIO 22
-//   DAC VCC -> VIN (5 V) DAC GND -> GND
-//   DAC FLT, DMP, SCL, FMT -> GND      DAC XMT -> 3.3V del propio DAC
+//   DAC VIN -> VIN (5 V) DAC GND -> GND
+//   Puentes del DAC: H1L, H2L y H4L a GND; H3L a 3,3 V; SCK a GND
 // =====================================================================
 #include <Arduino.h>
 #include <Preferences.h>
@@ -26,7 +26,7 @@ constexpr int PIN_BCK  = 26;  // reloj de bit
 constexpr int PIN_LCK  = 25;  // canal izquierdo/derecho (word select)
 constexpr int PIN_DIN  = 22;  // datos de audio
 
-constexpr const char* NOMBRE_BT = "Radio Mundial BT";
+constexpr const char* NOMBRE_BT = "TuneAmp32";
 
 // ---------------------------------------------------------------- DSP
 
@@ -244,7 +244,7 @@ void alCambiarVolumen(int volumen) {
 void setup() {
   Serial.begin(115200);
   delay(200);
-  Serial.println("\nRadio Mundial Boombox - prueba Bluetooth con DSP");
+  Serial.println("\nTuneAmp32 - Bluetooth con DSP");
   cargarAjustes();
 
   auto cfg = i2s.defaultConfig(TX_MODE);

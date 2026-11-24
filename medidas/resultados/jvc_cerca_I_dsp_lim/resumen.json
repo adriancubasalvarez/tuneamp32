@@ -1,7 +1,7 @@
 {
   "nombre": "jvc_cerca_I_dsp_lim",
   "tipo": "cerca",
-  "archivo": "D:\\INTERNET RADIO ESP32\\boombox\\medidas\\grabaciones\\jvc_cerca_I_dsp_lim.wav",
+  "archivo": "jvc_cerca_I_dsp_lim.wav",
   "canal": 0,
   "fs": 48000,
   "pico_dbfs": -13.074726947765674,

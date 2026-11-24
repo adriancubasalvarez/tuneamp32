@@ -1,5 +1,5 @@
 // =====================================================================
-// Corrección DSP (Digital Signal Processing) de las cápsulas del boombox
+// Corrección DSP (Digital Signal Processing) de TuneAmp32 (valores de fábrica: JVC CS-J520X)
 //
 // Cadena, igual en los dos canales:
 //   ganancia previa -> paso alto -> corte de la joroba
@@ -16,7 +16,7 @@
 //
 // Los filtros son biquads (filtros digitales de 2º orden) calculados con
 // las fórmulas del «Audio EQ Cookbook» de Robert Bristow-Johnson, las
-// mismas que usa boombox/medidas/disenar_eq.py.
+// mismas que usa medidas/disenar_eq.py.
 //
 // No depende de ninguna librería: se puede llevar tal cual al firmware de
 // la radio (ESP32-S3).
