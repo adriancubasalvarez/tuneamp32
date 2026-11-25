@@ -226,7 +226,7 @@ def analizar_tonos(y, inicio, relacion):
     return filas
 
 
-def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca):
+def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca, f_min_medida=0.0):
     y, fs_orig, canal, pico, avisos = cargar(ruta, canal)
     h = deconvolucionar(y)
     picos, relacion = buscar_barridos(h)
@@ -256,6 +256,7 @@ def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca):
     else:
         n_pre, n_post, caida = int(0.005 * FS), int(0.3 * FS), 0.5
         f_min, f_max = 20.0, 20000.0
+    f_min = max(f_min, f_min_medida)     # la señal no sonó por debajo
     p1 = espectro_medio(h, picos, n_pre, n_post, caida)
     nivel_abs = db(suavizar(F_LIN, p1, F_SALIDA))
 
@@ -273,7 +274,7 @@ def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca):
     caja = None
     valida = (F_SALIDA >= f_min) & (F_SALIDA <= f_max)
     if tipo == "cerca":
-        caja = ajustar_caja(F_SALIDA, nivel_abs, 50.0, min(600.0, f_max))
+        caja = ajustar_caja(F_SALIDA, nivel_abs, max(50.0, f_min), min(600.0, f_max))
         # 0 dB = nivel medio entre 250 y 600 Hz (la zona plana real, por
         # encima de la resonancia); el modelo se dibuja respecto a ella.
         zona = (F_SALIDA >= 250) & (F_SALIDA <= min(600.0, f_max))
@@ -318,7 +319,7 @@ def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca):
     # Tonos fijos
     # El pico de la respuesta al impulso marca dónde empieza el 1er barrido
     # en la grabación (más el retraso del sonido hasta el micrófono).
-    tonos = analizar_tonos(y, picos[0], relacion)
+    tonos = [t for t in analizar_tonos(y, picos[0], relacion) if t["f"] >= f_min_medida * 0.999]
     # Pasar el nivel de los tonos a la escala de la curva con la diferencia
     # mediana por encima de 100 Hz: sirven para comprobar la forma del grave.
     if tonos:
@@ -540,8 +541,10 @@ def main():
                     help="canal de la grabación (por defecto el de más nivel)")
     ap.add_argument("--fmax-cerca", type=float, default=1000.0,
                     help="límite superior de validez del campo cercano (1000 Hz)")
+    ap.add_argument("--fmin", type=float, default=0.0,
+                    help="frecuencia mínima con la que se generó la señal (medidas por USB)")
     a = ap.parse_args()
-    r = analizar(a.grabacion, a.nombre, a.tipo, a.ventana, a.canal, a.fmax_cerca)
+    r = analizar(a.grabacion, a.nombre, a.tipo, a.ventana, a.canal, a.fmax_cerca, a.fmin)
     carpeta = guardar(r)
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # consola de Windows
     print(texto_resumen(r))

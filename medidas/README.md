@@ -17,6 +17,9 @@ inexpensive wireless microphone (DJI Mic) and the Bluetooth test rig
 ```bash
 python medir.py --nivel --atenuacion 12
 python medir.py --nombre jvc_cerca_I --tipo cerca --canal I --atenuacion 12
+# over USB, no Bluetooth on the PC: the ESP32 generates the signal (start low!)
+python medir.py --usb --nivel --canal I --dbfs -30 --fmin 30
+python medir.py --usb --nombre my_speaker_L --canal I --dbfs -30 --fmin 30
 # or, with a recording made elsewhere:
 python generar_senales.py
 python analizar.py recordings/near_L.wav --nombre jvc_cerca_I --tipo cerca
@@ -50,6 +53,17 @@ micrófono inalámbrico barato (DJI Mic) y el montaje Bluetooth de prueba
 | `analizar.py` | Analiza una grabación: respuesta en frecuencia (1/6 de octava), ajuste de caja cerrada (fc, Qtc), F3/F6/F10, tabla de ecualización (transformada de Linkwitz), distorsión armónica según la frecuencia y THD/THD+N de los tonos graves. Deja un informe PDF, gráficos PNG y datos CSV en `resultados/<nombre>/`. |
 | `medir.py` | Mide directamente desde el PC: reproduce la sesión por Bluetooth hacia el ESP32 mientras graba el receptor del DJI Mic por USB, y la analiza (`pip install sounddevice`). `--nivel` comprueba el volumen y `--atenuacion` baja la señal desde el PC si el micrófono satura. |
 | `comparar.py` | Superpone varias medidas, o une la de campo cercano con la de 50 cm en una curva de 20 Hz a 20 kHz. |
+
+**Por USB, sin Bluetooth en el PC.** El ESP32 genera la señal (empieza bajo):
+
+```bash
+python medir.py --usb --nivel --canal I --dbfs -30 --fmin 30
+python medir.py --usb --nombre mi_altavoz_I --canal I --dbfs -30 --fmin 30
+```
+
+`--fmin` es la frecuencia más grave que suena: con altavoces pequeños, 60 o
+más. La música del Bluetooth se calla mientras se mide. Si el PC se
+desconecta, el ESP32 para solo en 3 s.
 
 **Método.** Barridos exponenciales deconvolucionados por división espectral
 regularizada (método de Farina): la distorsión armónica queda separada de la

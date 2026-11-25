@@ -20,6 +20,7 @@
 #include "AudioTools.h"
 #include "BluetoothA2DPSink.h"
 #include "dsp.h"
+#include "generador.h"
 
 // Pines I2S: ninguno es de arranque (strapping) en el ESP32
 constexpr int PIN_BCK  = 26;  // reloj de bit
@@ -42,16 +43,56 @@ class DspStream : public AudioStream {
  public:
   explicit DspStream(AudioStream& salida) : salida_(salida) {}
 
+  void preparar() { mutex_ = xSemaphoreCreateMutex(); }
+
   void setAudioInfo(AudioInfo info) override {
+    if (midiendo_) {
+      if ((int)info.sample_rate == fs_) return;   // nada que cambiar
+      cancelar_ = true;                           // otra frecuencia: la medida ya no vale
+    }
+    xSemaphoreTake(mutex_, portMAX_DELAY);
     AudioStream::setAudioInfo(info);
     salida_.setAudioInfo(info);
     fs_ = info.sample_rate;
     ajustes_cambiados = true;
+    xSemaphoreGive(mutex_);
     Serial.printf("Audio: %d Hz, %d canales, %d bits\n", info.sample_rate, info.channels,
                   info.bits_per_sample);
   }
 
+  // Audio del Bluetooth. Mientras se mide, se descarta (la música se calla).
   size_t write(const uint8_t* datos, size_t len) override {
+    if (midiendo_) return len;
+    xSemaphoreTake(mutex_, portMAX_DELAY);
+    if (!midiendo_) escribir(datos, len);
+    xSemaphoreGive(mutex_);
+    return len;
+  }
+
+  // Audio del generador de medida: pasa por la misma corrección
+  void escribirMedida(const uint8_t* datos, size_t len) {
+    xSemaphoreTake(mutex_, portMAX_DELAY);
+    escribir(datos, len);
+    xSemaphoreGive(mutex_);
+  }
+
+  void empezarMedida() { cancelar_ = false; midiendo_ = true; }
+  void terminarMedida() { midiendo_ = false; }
+  bool midiendo() const { return midiendo_; }
+  bool hayQueCancelar() const { return cancelar_; }
+
+  int frecuencia() const { return fs_; }
+
+  // Porcentaje del tiempo de audio que el procesador dedica al DSP (y lo reinicia)
+  float carga() {
+    const float c = us_audio_ > 0 ? 100.0f * (float)us_proceso_ / (float)us_audio_ : 0.0f;
+    us_proceso_ = us_audio_ = 0;
+    return c;
+  }
+
+ private:
+  // Con el mutex cogido
+  void escribir(const uint8_t* datos, size_t len) {
     if (ajustes_cambiados) {
       AjustesDSP copia;
       portENTER_CRITICAL(&cerrojo);
@@ -74,19 +115,10 @@ class DspStream : public AudioStream {
       salida_.write((const uint8_t*)bufer_, n);
       hecho += n;
     }
-    return len;
   }
 
-  int frecuencia() const { return fs_; }
-
-  // Porcentaje del tiempo de audio que el procesador dedica al DSP (y lo reinicia)
-  float carga() {
-    const float c = us_audio_ > 0 ? 100.0f * (float)us_proceso_ / (float)us_audio_ : 0.0f;
-    us_proceso_ = us_audio_ = 0;
-    return c;
-  }
-
- private:
+  SemaphoreHandle_t mutex_ = nullptr;
+  volatile bool midiendo_ = false, cancelar_ = false;
   AudioStream& salida_;
   int fs_ = 44100;
   int16_t bufer_[512];
@@ -96,6 +128,80 @@ class DspStream : public AudioStream {
 I2SStream i2s;                       // salida I2S hacia el DAC
 DspStream dsp(i2s);
 BluetoothA2DPSink a2dp(dsp);         // receptor de audio Bluetooth
+
+// -------------------------------------------------------------- medida
+
+// El PC tiene que mandar algo (por ejemplo «sigo») al menos cada 3 s
+// mientras se mide; si no, se entiende que se ha desconectado y se para.
+constexpr uint32_t ESPERA_PC_MS = 3000;
+// Si entre dos bloques pasa más que esto, el búfer I2S se puede vaciar
+constexpr int64_t HUECO_MAX_US = 10000;
+
+Generador generador;                 // solo lo usa la tarea de medida
+struct OrdenMedida { Canal canal; float nivel, f_min; };
+TaskHandle_t tarea_medida = nullptr;
+volatile bool parar_medida = false;
+volatile uint32_t ultimo_pc_ms = 0;
+
+void tareaMedida(void*) {
+  static int16_t bloque[512];
+  for (;;) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    const char* motivo = nullptr;
+    int64_t hueco = 0, ultimo = 0;
+    bool sigue = true;
+    while (sigue) {
+      if (!motivo) {
+        if (parar_medida) motivo = "orden parar";
+        else if (dsp.hayQueCancelar()) motivo = "el Bluetooth ha cambiado la frecuencia";
+        else if (millis() - ultimo_pc_ms > ESPERA_PC_MS) motivo = "sin noticias del PC";
+        if (motivo) generador.parar();
+      }
+      sigue = generador.generar(bloque, 256);
+      const int64_t ahora = esp_timer_get_time();
+      if (ultimo && ahora - ultimo > hueco) hueco = ahora - ultimo;
+      dsp.escribirMedida((const uint8_t*)bloque, sizeof(bloque));
+      ultimo = esp_timer_get_time();
+    }
+    dsp.terminarMedida();
+    if (motivo) Serial.printf("medida cancelada: %s\n", motivo);
+    else Serial.printf("medida terminada | hueco %.1f ms%s\n", hueco / 1000.0f,
+                       hueco > HUECO_MAX_US ? " | CORTES" : "");
+  }
+}
+
+// «medir izquierdo -30 30»: canal, nivel de pico (dBFS) y frecuencia mínima (Hz)
+void empezarMedida(const String& linea, bool corta) {
+  if (dsp.midiendo()) {
+    Serial.println("error: ya se está midiendo");
+    return;
+  }
+  char cmd[16], canal[16] = {0};
+  OrdenMedida o{Canal::ambos, -30.0f, 30.0f};
+  const int n = sscanf(linea.c_str(), "%15s %15s %f %f", cmd, canal, &o.nivel, &o.f_min);
+  const String c(canal);
+  if (c == "izquierdo") o.canal = Canal::izquierdo;
+  else if (c == "derecho") o.canal = Canal::derecho;
+  else if (c != "ambos" || n < 2) {
+    Serial.println("error: medir izquierdo|derecho|ambos NIVEL FMIN");
+    return;
+  }
+  if (!(o.nivel >= Generador::NIVEL_MIN && o.nivel <= Generador::NIVEL_MAX)) {
+    Serial.printf("error: el nivel va de %.0f a %.0f dBFS\n", Generador::NIVEL_MIN, Generador::NIVEL_MAX);
+    return;
+  }
+  if (!(o.f_min >= Generador::FMIN_MIN && o.f_min <= Generador::FMIN_MAX)) {
+    Serial.printf("error: la frecuencia minima va de %.0f a %.0f Hz\n", Generador::FMIN_MIN, Generador::FMIN_MAX);
+    return;
+  }
+  dsp.empezarMedida();               // desde aquí la música se calla
+  parar_medida = false;
+  ultimo_pc_ms = millis();
+  generador.empezar(dsp.frecuencia(), o.canal, o.nivel, o.f_min, corta);
+  Serial.printf("ok midiendo %s %.1f dBFS desde %.0f Hz | %.1f s | %d Hz\n", c.c_str(), o.nivel,
+                o.f_min, generador.duracion(), dsp.frecuencia());
+  xTaskNotifyGive(tarea_medida);
+}
 
 void cargarAjustes() {
   memoria.begin("dsp", true);
@@ -169,6 +275,9 @@ void ayuda() {
       "  limitador on | off      refuerzo de grave dinámico y limitador final\n"
       "  gravesmax DB            grave a partir del que se reduce el refuerzo (p. ej. -6)\n"
       "  techo DB                nivel máximo de salida (p. ej. -1)\n"
+      "  medir CANAL DBFS HZ     senal de medida (p. ej. medir izquierdo -30 30)\n"
+      "  barrido CANAL DBFS HZ   un solo barrido, para comprobar el nivel\n"
+      "  parar                   para la medida (manda «sigo» cada segundo para que no se pare)\n"
       "  guardar                 guarda los ajustes (se mantienen al apagar)\n"
       "  fabrica                 vuelve a los ajustes de fábrica (sin guardar)");
 }
@@ -192,6 +301,15 @@ void orden(String linea) {
   } else if (s == "ayuda" || s == "help") {
     ayuda();
     return;
+  } else if (s == "medir" || s == "barrido") {
+    empezarMedida(linea, s == "barrido");
+    return;
+  } else if (s == "parar") {
+    if (dsp.midiendo()) parar_medida = true;
+    Serial.println("ok parar");
+    return;
+  } else if (s == "sigo") {
+    return;                          // solo renueva la espera
   } else if (s == "dsp") {
     nuevo.activo = linea.endsWith("on");
   } else if (s == "ganancia" && n >= 2) {
@@ -246,6 +364,8 @@ void setup() {
   delay(200);
   Serial.println("\nTuneAmp32 - Bluetooth con DSP");
   cargarAjustes();
+  dsp.preparar();
+  xTaskCreatePinnedToCore(tareaMedida, "medida", 4096, nullptr, 5, &tarea_medida, 1);
 
   auto cfg = i2s.defaultConfig(TX_MODE);
   cfg.pin_bck  = PIN_BCK;
@@ -268,6 +388,7 @@ void loop() {
   while (Serial.available()) {
     char ch = (char)Serial.read();
     if (ch == '\n' || ch == '\r') {
+      ultimo_pc_ms = millis();
       orden(linea);
       linea = "";
     } else if (linea.length() < 80) {
