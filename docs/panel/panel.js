@@ -1,6 +1,7 @@
 import { PARAMS, FABRICA, cadenaDb, comandosEntre, leerAjustes, leerEstado,
          leerPerfil, escribirPerfil } from "./dsp.js";
 import { Serie } from "./serie.js";
+import { AYUDAS } from "./ayudas.js";
 
 const $ = (id) => document.getElementById(id);
 const REFUERZO_AVISO = 6;                 // dB: por encima se pide confirmación
@@ -8,7 +9,7 @@ const REFUERZO_AVISO = 6;                 // dB: por encima se pide confirmació
 // ------------------------------------------------------------------ textos
 const T = {
   es: {
-    panel: "· Panel", otro: "English", conectar: "Conectar", desconectar: "Desconectar",
+    panel: "· Panel", otro: "English", ayuda: "Cómo funciona", queEs: "Qué es", conectar: "Conectar", desconectar: "Desconectar",
     conectado: "Conectado", sin: "Sin conectar", curva: "Curva de corrección",
     ejemplos: "Ejemplos", elige: "Elige un ejemplo…", verMedida: "Ver la medida del ejemplo", medida: "Medida", correccion: "Corrección", prevista: "Prevista",
     notaCurva: "Niveles relativos, sin la ganancia previa y con el refuerzo de grave completo. Los ejemplos son para ese altavoz concreto: en otro pueden sonar mal o dañarlo.",
@@ -32,7 +33,7 @@ const T = {
     margenBien: (x) => `Margen: ${x} dB antes de llegar al máximo digital.`,
   },
   en: {
-    panel: "· Panel", otro: "Español", conectar: "Connect", desconectar: "Disconnect",
+    panel: "· Panel", otro: "Español", ayuda: "How it works", queEs: "What is", conectar: "Connect", desconectar: "Disconnect",
     conectado: "Connected", sin: "Not connected", curva: "Correction curve",
     ejemplos: "Examples", elige: "Choose an example…", verMedida: "Show the example measurement", medida: "Measured", correccion: "Correction", prevista: "Predicted",
     notaCurva: "Relative levels, without pre-gain and with full bass boost. Examples are for that exact speaker: on another one they may sound bad or damage it.",
@@ -96,6 +97,20 @@ async function confirmar(de, a) {
 }
 
 // ------------------------------------------------------------------ mandos
+// Etiqueta con su botón «?», que abre la explicación debajo
+function conAyuda(etiqueta, k) {
+  const fila = document.createElement("div"), b = document.createElement("button"), p = document.createElement("p");
+  fila.className = "titulo";
+  b.className = "duda"; b.type = "button"; b.textContent = "?";
+  b.setAttribute("aria-label", `${t("queEs")}: ${t(k)}`);
+  b.setAttribute("aria-expanded", "false");
+  b.setAttribute("aria-controls", "a_" + k);
+  p.className = "ayuda"; p.id = "a_" + k; p.hidden = true; p.textContent = AYUDAS[idioma][k];
+  b.onclick = () => { p.hidden = !p.hidden; b.setAttribute("aria-expanded", String(!p.hidden)); };
+  fila.append(etiqueta, b);
+  return [fila, p];
+}
+
 function crearMandos() {
   const caja = $("mandos");
   caja.replaceChildren();
@@ -113,7 +128,7 @@ function crearMandos() {
       i.type = "checkbox"; i.id = "p_" + sw;
       i.onchange = () => cambiar({ [sw]: i.checked });
       l.append(i, t(sw));
-      s.append(l);
+      s.append(...conAyuda(l, sw));
     }
     for (const [k, d] of Object.entries(PARAMS)) {
       if (d.grupo !== grupo) continue;
@@ -147,7 +162,7 @@ function crearMandos() {
       const u = document.createElement("span");
       u.className = "u"; u.textContent = d.u;
       f.append(r, n, u);
-      m.append(l, f);
+      m.append(...conAyuda(l, k), f);
       s.append(m);
     }
     caja.append(s);

@@ -18,6 +18,8 @@ An ESP32 Bluetooth amplifier that **tunes itself to your speakers**: measure wit
 | [`carcasa/altavoz_gota_jvc`](carcasa/altavoz_gota_jvc) | JVC teardrop speaker, 3D files |
 | [`docs`](docs) | Web panel, speaker profiles and project documents |
 
+New here? Read [How it works](docs/ayuda/index.html) (open it in your browser).
+
 ## Build
 
 - **PlatformIO:** `pio run -t upload` inside `firmware/tuneamp32`.

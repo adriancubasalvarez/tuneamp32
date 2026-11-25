@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneAmp32 · Cómo funciona</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../panel/panel.css">
+<style>
+  main { max-width: 820px; }
+  h1 { font-size: 24px; } h2 { font-size: 18px; margin-bottom: 8px; }
+  .entrada { font-size: 17px; margin: 8px 0 0; }
+  .tarjeta p, .tarjeta ul, .tarjeta ol { margin: 8px 0 0; } .tarjeta li { margin: 4px 0; } ul, ol { padding-left: 22px; }
+  .camino { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
+  .camino span { border: 1px solid var(--eje); border-radius: 8px; padding: 8px 12px; }
+  .camino .clave { border: 2px solid var(--accion); font-weight: 600; }
+  .tarjeta table { width: 100%; font-size: 14px; } .tarjeta th, .tarjeta td { text-align: left; vertical-align: top; padding: 6px 12px 6px 0; }
+  dt { font-weight: 600; margin-top: 10px; } dd { margin: 2px 0 0; color: var(--tinta2); }
+  .hecho, .falta { font-size: 13px; white-space: nowrap; } .falta { color: var(--tinta2); }
+  .hecho::before { content: "✓ "; } .falta::before { content: "○ "; }
+  article { display: grid; gap: 14px; } article > * { min-width: 0; }
+  a { color: var(--accion); } a.boton { text-decoration: none; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--eje); color: var(--tinta); }
+  .alerta { border-color: var(--critico); } .alerta h2::before { content: "⚠ "; color: var(--critico); }
+</style>
+</head>
+<body>
+<header>
+  <div class="marca">TuneAmp32</div>
+  <div class="acciones"><a class="boton" href="../panel/">Panel</a><button id="idioma">English</button></div>
+</header>
+<main>
+
+<article lang="es">
+  <div>
+    <h1>Cómo funciona</h1>
+    <p class="entrada">TuneAmp32 hace que un altavoz suene mejor en tres pasos: escucha cómo suena, calcula qué le sobra o le falta, y lo compensa antes de que el sonido llegue al altavoz.</p>
+  </div>
+
+  <section class="tarjeta">
+    <h2>El recorrido del sonido</h2>
+    <div class="camino"><span>Móvil</span>→<span class="clave">ESP32: corrige el sonido</span>→<span>DAC</span>→<span>Amplificador</span>→<span>Altavoz</span></div>
+    <p>La música llega por Bluetooth. El ESP32 la corrige y el DAC (conversor de digital a analógico) la convierte en señal para el amplificador. La corrección <b>se guarda en el ESP32</b>: una vez ajustado, no necesitas el ordenador.</p>
+  </section>
+
+  <section class="tarjeta alerta">
+    <h2>Antes de empezar</h2>
+    <ul>
+      <li>De fábrica <b>no corrige nada</b> y no lleva paso alto. <b>Empieza siempre con el volumen bajo</b>, sobre todo con altavoces pequeños.</li>
+      <li>Usa cada perfil <b>solo con su altavoz</b>. En otro puede sonar mal o dañarlo.</li>
+      <li>El limitador evita que la señal digital recorte. <b>No garantiza</b> que el cono no se mueva demasiado.</li>
+      <li>Si oyes golpes, zumbidos o crujidos, baja el volumen y reduce el refuerzo de grave.</li>
+      <li>Muchos amplificadores pequeños, como el TPA3116D2, tienen la salida en puente: <b>no unas los negativos de los altavoces</b> entre sí ni a masa.</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta">
+    <h2>El ciclo completo</h2>
+    <div class="desliza"><table>
+      <tr><th>Paso</th><th>Qué pasa</th><th>Estado</th></tr>
+      <tr><td>1. Conectar</td><td>El panel lee los ajustes del ESP32 por el cable USB.</td><td class="hecho">Disponible</td></tr>
+      <tr><td>2. Medir</td><td>Suenan unos barridos, y un micro a 1 cm del cono los graba.</td><td class="falta">De momento, con los programas de PC</td></tr>
+      <tr><td>3. Diagnosticar</td><td>De la grabación sale la curva del altavoz.</td><td class="falta">De momento, con los programas de PC</td></tr>
+      <tr><td>4. Corregir</td><td>Se propone una corrección y tú la retocas escuchando.</td><td class="falta">Mandos disponibles; propuesta, en PC</td></tr>
+      <tr><td>5. Verificar</td><td>Se mide otra vez para ver el antes y el después.</td><td class="falta">De momento, con los programas de PC</td></tr>
+      <tr><td>6. Compartir</td><td>El perfil se guarda en un archivo para otros altavoces iguales.</td><td class="hecho">Archivo disponible</td></tr>
+    </table></div>
+    <p class="nota">Los programas de PC están en la carpeta <code>medidas</code> del proyecto. Su propuesta automática está pensada aún para el altavoz del ejemplo 1.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Ajustar a oído con el panel</h2>
+    <ol>
+      <li>Abre el <a href="../panel/">panel</a> en Chrome o Edge, en un ordenador.</li>
+      <li>Conecta el ESP32 por USB, pulsa <b>Conectar</b> y elige su puerto.</li>
+      <li>Conecta el móvil a «TuneAmp32» por Bluetooth y pon música conocida, bajito.</li>
+      <li>Mueve un mando. El cambio se oye al soltarlo.</li>
+      <li>Si suena retumbón, baja la <b>joroba</b> poco a poco y busca su frecuencia.</li>
+      <li>Si falta grave, sube el <b>refuerzo</b> poco a poco y pon un <b>paso alto</b> por debajo.</li>
+      <li>Si el panel avisa de que falta margen, baja la <b>ganancia previa</b>.</li>
+      <li>Pulsa <b>Guardar</b> cuando te guste. Hasta entonces, apagar el ESP32 lo deja como estaba.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Leer la gráfica</h2>
+    <p>A la izquierda está el grave; a la derecha, el agudo. Arriba es más fuerte y abajo más flojo. La línea verde de rayas es la <b>corrección</b>. Con un ejemplo cargado, la azul es cómo suena el altavoz y la naranja cómo debería sonar corregido: cuanto más plana, mejor. La caída en el extremo grave es normal.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Ejemplo 1: JVC CS-J520X en altavoz de gota</h2>
+    <p>Un diseño de Adrián. La medida mostró una joroba de 6 dB hacia 170 Hz y poco grave por debajo de unos 115 Hz. El perfil baja la joroba, refuerza el grave hacia 75 Hz y quita lo que hay por debajo de unos 65 Hz. Está en la lista de ejemplos del panel.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Lo que no puede hacer</h2>
+    <ul>
+      <li>Convertir un altavoz pequeño en un subgrave.</li>
+      <li>Arreglar distorsión, piezas dañadas o los ecos de la habitación.</li>
+      <li>Medir bien los agudos con el micro a 1 cm: así se miden el grave y el medio-grave.</li>
+      <li>Corregir más de dos zonas a la vez: hoy hay dos filtros, más el paso alto.</li>
+      <li>Reproducir música por USB: el cable sirve para ajustar. La música va por Bluetooth.</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Glosario</h2>
+    <dl>
+      <dt>Hz (hercio)</dt><dd>Lo grave o agudo que es un sonido. 50 Hz es muy grave; 5000 Hz, agudo.</dd>
+      <dt>dB (decibelio)</dt><dd>Lo fuerte que es respecto a otro sonido. +6 dB es el doble de tensión y cuatro veces más potencia.</dd>
+      <dt>dBFS</dt><dd>Decibelios respecto al máximo digital. 0 es el tope; todo lo demás es negativo.</dd>
+      <dt>Joroba</dt><dd>Una zona que el altavoz reproduce más fuerte de lo debido.</dd>
+      <dt>Q</dt><dd>Lo estrecho que es un filtro. Q alta: afecta a pocas notas. Q baja: a muchas.</dd>
+      <dt>Paso alto</dt><dd>Filtro que deja pasar los agudos y quita los graves por debajo de una frecuencia.</dd>
+      <dt>F3</dt><dd>Frecuencia en la que el altavoz ya ha bajado 3 dB. Indica hasta dónde llega su grave.</dd>
+      <dt>Limitador</dt><dd>Baja el volumen un instante cuando la señal va a pasar del tope.</dd>
+      <dt>DSP</dt><dd>Procesador digital de señal: la parte del ESP32 que corrige el sonido.</dd>
+    </dl>
+  </section>
+</article>
+
+<article lang="en" hidden>
+  <div>
+    <h1>How it works</h1>
+    <p class="entrada">TuneAmp32 makes a speaker sound better in three steps: it listens to how it sounds, works out what is too much or too little, and compensates for it before the sound reaches the speaker.</p>
+  </div>
+
+  <section class="tarjeta">
+    <h2>The path of the sound</h2>
+    <div class="camino"><span>Phone</span>→<span class="clave">ESP32: corrects the sound</span>→<span>DAC</span>→<span>Amplifier</span>→<span>Speaker</span></div>
+    <p>Music arrives over Bluetooth. The ESP32 corrects it and the DAC (digital-to-analog converter) turns it into a signal for the amplifier. The correction <b>is stored in the ESP32</b>: once it is set, you do not need the computer.</p>
+  </section>
+
+  <section class="tarjeta alerta">
+    <h2>Before you start</h2>
+    <ul>
+      <li>From the factory it <b>corrects nothing</b> and has no high-pass. <b>Always start with the volume low</b>, especially with small speakers.</li>
+      <li>Use each profile <b>only with its own speaker</b>. On another it may sound bad or cause damage.</li>
+      <li>The limiter prevents digital clipping. It <b>does not guarantee</b> that the cone will not move too far.</li>
+      <li>If you hear knocks, buzzing or crackling, turn the volume down and reduce the bass boost.</li>
+      <li>Many small amplifiers, such as the TPA3116D2, have bridged outputs: <b>never join the speaker negatives</b> together or to ground.</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta">
+    <h2>The full cycle</h2>
+    <div class="desliza"><table>
+      <tr><th>Step</th><th>What happens</th><th>Status</th></tr>
+      <tr><td>1. Connect</td><td>The panel reads the ESP32 settings over the USB cable.</td><td class="hecho">Available</td></tr>
+      <tr><td>2. Measure</td><td>Sweeps are played and a mic 1 cm from the cone records them.</td><td class="falta">PC programs for now</td></tr>
+      <tr><td>3. Diagnose</td><td>The recording gives the speaker's curve.</td><td class="falta">PC programs for now</td></tr>
+      <tr><td>4. Correct</td><td>A correction is proposed and you fine-tune it by ear.</td><td class="falta">Controls available; proposal on PC</td></tr>
+      <tr><td>5. Verify</td><td>Measure again to see before and after.</td><td class="falta">PC programs for now</td></tr>
+      <tr><td>6. Share</td><td>The profile is saved to a file for identical speakers.</td><td class="hecho">File available</td></tr>
+    </table></div>
+    <p class="nota">The PC programs are in the project's <code>medidas</code> folder. Their automatic proposal is still designed for the example 1 speaker.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Tuning by ear with the panel</h2>
+    <ol>
+      <li>Open the <a href="../panel/">panel</a> in Chrome or Edge on a computer.</li>
+      <li>Connect the ESP32 over USB, press <b>Connect</b> and choose its port.</li>
+      <li>Connect your phone to "TuneAmp32" over Bluetooth and play familiar music, quietly.</li>
+      <li>Move a control. You hear the change when you release it.</li>
+      <li>If it booms, lower the <b>hump</b> little by little and search for its frequency.</li>
+      <li>If bass is missing, raise the <b>boost</b> little by little and set a <b>high-pass</b> below it.</li>
+      <li>If the panel warns about headroom, lower the <b>pre-gain</b>.</li>
+      <li>Press <b>Save</b> when you like it. Until then, powering off restores the previous settings.</li>
+    </ol>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Reading the graph</h2>
+    <p>Bass is on the left, treble on the right. Up is louder, down is quieter. The dashed green line is the <b>correction</b>. With an example loaded, blue is how the speaker sounds and orange is how it should sound once corrected: the flatter, the better. The drop at the bass end is normal.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Example 1: JVC CS-J520X in a teardrop pod</h2>
+    <p>Designed by Adrián. The measurement showed a 6 dB hump around 170 Hz and little bass below about 115 Hz. The profile lowers the hump, boosts bass around 75 Hz and removes what lies below about 65 Hz. It is in the panel's example list.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>What it cannot do</h2>
+    <ul>
+      <li>Turn a small speaker into a subwoofer.</li>
+      <li>Fix distortion, damaged parts or room echoes.</li>
+      <li>Measure treble well with the mic at 1 cm: that method is for bass and mid-bass.</li>
+      <li>Correct more than two areas at once: today there are two filters, plus the high-pass.</li>
+      <li>Play music over USB: the cable is for tuning. Music goes over Bluetooth.</li>
+    </ul>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>Hz (hertz)</dt><dd>How low or high a sound is. 50 Hz is very low; 5000 Hz is high.</dd>
+      <dt>dB (decibel)</dt><dd>How loud something is compared with another sound. +6 dB is twice the voltage and four times the power.</dd>
+      <dt>dBFS</dt><dd>Decibels relative to digital full scale. 0 is the limit; everything else is negative.</dd>
+      <dt>Hump</dt><dd>An area the speaker plays louder than it should.</dd>
+      <dt>Q</dt><dd>How narrow a filter is. High Q: affects few notes. Low Q: many.</dd>
+      <dt>High-pass</dt><dd>A filter that lets treble through and removes bass below a frequency.</dd>
+      <dt>F3</dt><dd>The frequency where the speaker is already 3 dB down. It tells how deep its bass goes.</dd>
+      <dt>Limiter</dt><dd>Turns the volume down for an instant when the signal is about to exceed the ceiling.</dd>
+      <dt>DSP</dt><dd>Digital signal processor: the part of the ESP32 that corrects the sound.</dd>
+    </dl>
+  </section>
+</article>
+
+</main>
+<script>
+  let idioma = "es";
+  try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("es") ? "es" : "en"); } catch { /* da igual */ }
+  if (idioma !== "en") idioma = "es";
+  const poner = () => {
+    document.documentElement.lang = idioma;
+    for (const a of document.querySelectorAll("article")) a.hidden = a.lang !== idioma;
+    document.getElementById("idioma").textContent = idioma === "es" ? "English" : "Español";
+    document.title = idioma === "es" ? "TuneAmp32 · Cómo funciona" : "TuneAmp32 · How it works";
+  };
+  document.getElementById("idioma").onclick = () => {
+    idioma = idioma === "es" ? "en" : "es";
+    try { localStorage.setItem("idioma", idioma); } catch { /* da igual */ }
+    poner();
+  };
+  poner();
+</script>
+</body>
+</html>

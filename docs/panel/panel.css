@@ -52,6 +52,10 @@ button:disabled { opacity: .45; cursor: default; }
   border-radius: 6px; background: var(--fondo); color: var(--tinta); }
 .mando .u { width: 22px; color: var(--tinta2); font-size: 13px; }
 select { font: inherit; padding: 5px 8px; border: 1px solid var(--eje); border-radius: 6px; background: var(--fondo); color: var(--tinta); max-width: 100%; min-width: 0; }
+a.boton { display: inline-flex; align-items: center; min-height: 38px; padding: 7px 13px; border: 1px solid var(--eje); border-radius: 8px; color: var(--tinta); text-decoration: none; }
+.titulo { display: flex; align-items: center; gap: 6px; }
+button.duda { min-height: 24px; width: 24px; height: 24px; padding: 0; border-radius: 50%; font-size: 13px; color: var(--tinta2); flex: none; }
+.ayuda { font-size: 13px; color: var(--tinta2); margin: 2px 0 6px; }
 .check { display: inline-flex; gap: 7px; align-items: center; min-height: 32px; font-size: 14px; }
 .desliza { overflow-x: auto; } table { border-collapse: collapse; font-size: 13px; margin-top: 8px; font-variant-numeric: tabular-nums; }
 th, td { padding: 3px 14px 3px 0; text-align: right; border-bottom: 1px solid var(--malla); }

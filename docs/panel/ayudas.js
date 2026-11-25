@@ -1,0 +1,31 @@
+// Explicación corta de cada mando del panel
+export const AYUDAS = {
+es: {
+  dsp: "Enciende o apaga los filtros para comparar. La ganancia previa y el limitador siguen actuando.",
+  limitador: "Evita que la señal pase del techo y reduce solo el refuerzo de grave a volumen alto. Déjalo puesto.",
+  ganancia: "Baja el nivel general para dejar sitio a lo que suben los filtros. Si refuerzas el grave 6 dB, prueba con −7.",
+  pasoalto: "Quita los graves por debajo de esta frecuencia, que fuerzan el cono. Ponlo siempre que refuerces el grave; 0 lo quita.",
+  joroba_f: "Dónde está la zona que retumba. Muévela despacio hasta notar dónde mejora.",
+  joroba_db: "Cuánto se baja (negativo) o se sube esa zona. Empieza con −3; 0 no hace nada.",
+  joroba_q: "Lo estrecho que es el filtro. Alta afecta a pocas notas; baja, a muchas. Empieza con 1 o 2.",
+  grave_f: "Dónde se refuerza el grave. Por debajo de lo que el altavoz puede dar solo se consigue distorsión.",
+  grave_db: "Cuánto se refuerza. Empieza con +3 y escucha. Más de +6 puede dañar un altavoz pequeño.",
+  grave_q: "Lo estrecho que es el refuerzo. Cerca de 1 suena natural.",
+  gravesmax: "Nivel de grave a partir del cual se reduce el refuerzo. Más bajo protege más. Solo actúa con el limitador puesto.",
+  techo: "Nivel máximo de salida. −1 evita recortes; más bajo limita también el volumen máximo.",
+},
+en: {
+  dsp: "Turns the filters on or off to compare. Pre-gain and limiter keep working.",
+  limitador: "Keeps the signal below the ceiling and reduces the bass boost by itself at high volume. Leave it on.",
+  ganancia: "Lowers the overall level to make room for what the filters raise. With 6 dB of bass boost, try −7.",
+  pasoalto: "Removes bass below this frequency, which strains the cone. Use it whenever you boost bass; 0 turns it off.",
+  joroba_f: "Where the booming area is. Move it slowly until you hear where it improves.",
+  joroba_db: "How much that area is lowered (negative) or raised. Start with −3; 0 does nothing.",
+  joroba_q: "How narrow the filter is. High affects few notes; low, many. Start with 1 or 2.",
+  grave_f: "Where bass is boosted. Below what the speaker can deliver you only get distortion.",
+  grave_db: "How much it is boosted. Start with +3 and listen. More than +6 can damage a small speaker.",
+  grave_q: "How narrow the boost is. Near 1 sounds natural.",
+  gravesmax: "Bass level above which the boost is reduced. Lower protects more. Only works with the limiter on.",
+  techo: "Maximum output level. −1 avoids clipping; lower also limits the maximum volume.",
+},
+};

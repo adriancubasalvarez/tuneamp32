@@ -18,6 +18,8 @@ Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un 
 | [`carcasa/altavoz_gota_jvc`](carcasa/altavoz_gota_jvc) | Altavoz de gota JVC, archivos 3D |
 | [`docs`](docs) | Panel web, perfiles de altavoces y documentos |
 
+¿Es tu primera vez? Lee [Cómo funciona](docs/ayuda/index.html) (ábrelo en el navegador).
+
 ## Compilar
 
 - **PlatformIO:** `pio run -t upload` dentro de `firmware/tuneamp32`.
