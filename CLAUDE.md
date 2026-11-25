@@ -9,5 +9,5 @@ Lee `docs/TUNEAMP32_ARRANQUE.md` entero antes de proponer nada.
 5. Cambios pequeños y verificables: cada fase compila y se prueba en la placa real.
 6. `main` de Radio Mundial no se toca.
 
-Estado: R1 (mudanza) hecha, pendiente de prueba en la placa. Protección de acceso Bluetooth: aplazada.
+Estado: R1 hecha y probada en la placa con DAC. W1 (panel en docs/panel) escrita; falta probarla en Chrome con la placa. Probar: `python -m http.server 8032 --bind 127.0.0.1 -d docs` y abrir http://localhost:8032/panel/. Protección de acceso Bluetooth: aplazada.
 Antes de publicar el instalador web (R4) hace falta el perfil neutro: los valores de fábrica son de las JVC.

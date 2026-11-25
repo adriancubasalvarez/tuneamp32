@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneAmp32 · Panel</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<header>
+  <div class="marca">TuneAmp32 <span data-t="panel"></span></div>
+  <div class="acciones">
+    <span id="conexion" class="chip" role="status"></span>
+    <button id="conectar" class="principal"></button>
+    <button id="idioma"></button>
+  </div>
+</header>
+
+<main>
+  <p id="aviso" class="aviso" role="alert" hidden></p>
+
+  <section class="tarjeta">
+    <div class="cabecera">
+      <h1 data-t="curva"></h1>
+      <label class="check"><input type="checkbox" id="verMedida" checked> <span data-t="ejemplo"></span></label>
+    </div>
+    <div id="leyenda" class="leyenda"></div>
+    <div id="marco"><svg id="grafico" role="img" tabindex="0"></svg><div id="globo" hidden></div></div>
+    <p class="nota" data-t="notaCurva"></p>
+    <details><summary data-t="tabla"></summary><div class="desliza"><table id="tabla"></table></div></details>
+  </section>
+
+  <section class="tarjeta estado" aria-live="off">
+    <div><span data-t="ePico"></span><b id="ePico">–</b></div>
+    <div><span data-t="eGrave"></span><b id="eGrave">–</b></div>
+    <div><span data-t="eLim"></span><b id="eLim">–</b></div>
+    <div><span data-t="eRec"></span><b id="eRec">–</b></div>
+    <div><span data-t="eCarga"></span><b id="eCarga">–</b></div>
+  </section>
+
+  <div id="mandos" class="mandos"></div>
+  <p id="margen" class="nota"></p>
+
+  <section class="tarjeta barra">
+    <button id="guardar" class="principal" data-t="guardar"></button>
+    <button id="deshacer" data-t="deshacer"></button>
+    <button id="fabrica" data-t="fabrica"></button>
+    <span class="separa"></span>
+    <button id="bajar" data-t="bajar"></button>
+    <button id="subir" data-t="subir"></button>
+    <input type="file" id="archivo" accept=".json,application/json" hidden>
+    <span id="pendiente" class="nota" role="status"></span>
+  </section>
+
+  <details class="tarjeta"><summary data-t="registro"></summary><pre id="registro"></pre></details>
+</main>
+
+<dialog id="dialogo">
+  <p id="pregunta"></p>
+  <div class="barra"><button id="no" data-t="cancelar"></button><button id="si" class="principal" data-t="continuar"></button></div>
+</dialog>
+<script type="module" src="panel.js"></script>
+</body>
+</html>

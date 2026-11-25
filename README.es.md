@@ -4,7 +4,7 @@
 
 Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un micro barato → propuesta de corrección → cargarla en el ESP32 → volver a medir y verificar.
 
-> **Estado: en desarrollo.** Código recién traído de Radio Mundial; aún sin volver a probar en la placa.
+> **Estado: en desarrollo.** Código recién traído de Radio Mundial; probado en la placa. Herramientas web en marcha (`docs/panel`).
 
 > ⚠️ **Los valores de fábrica son para las JVC CS-J520X** (refuerzo de grave de hasta +9 dB). Con cualquier otro altavoz, manda `dsp off` por el puerto serie **antes de poner música**, `guardar` para conservarlo, y mide primero. `dsp off` también quita el paso alto de protección. Habrá un perfil neutro.
 

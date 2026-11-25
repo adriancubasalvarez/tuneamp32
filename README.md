@@ -4,7 +4,7 @@
 
 An ESP32 Bluetooth amplifier that **tunes itself to your speakers**: measure with an inexpensive microphone → get a proposed correction → load it into the ESP32 → measure again to verify.
 
-> **Status: in development.** Code just moved here from Radio Mundial; not yet re-tested on the board.
+> **Status: in development.** Code just moved here from Radio Mundial; tested on the board. Web tools in progress (`docs/panel`).
 
 > ⚠️ **The factory settings are for the JVC CS-J520X** (bass boost up to +9 dB). With any other speaker, send `dsp off` over serial **before playing music**, then `guardar` to keep it, and measure first. `dsp off` also disables the protective high-pass. A neutral profile is planned.
 
