@@ -10,14 +10,14 @@ const T = {
   es: {
     panel: "· Panel", otro: "English", conectar: "Conectar", desconectar: "Desconectar",
     conectado: "Conectado", sin: "Sin conectar", curva: "Curva de corrección",
-    ejemplo: "Medida de ejemplo (JVC CS-J520X)", medida: "Medida JVC", correccion: "Corrección", prevista: "Prevista",
-    notaCurva: "Niveles relativos, sin la ganancia previa y con el refuerzo de grave completo. La medida es de las JVC: con otro altavoz solo vale la curva de corrección.",
+    ejemplos: "Ejemplos", elige: "Elige un ejemplo…", verMedida: "Ver la medida del ejemplo", medida: "Medida", correccion: "Corrección", prevista: "Prevista",
+    notaCurva: "Niveles relativos, sin la ganancia previa y con el refuerzo de grave completo. Los ejemplos son para ese altavoz concreto: en otro pueden sonar mal o dañarlo.",
     tabla: "Ver como tabla", frec: "Frecuencia", ePico: "Pico de salida", eGrave: "Grave reducido", eLim: "Limitador", eRec: "Recortes", eCarga: "Carga del DSP",
     g_general: "General", g_joroba: "Joroba (resonancia)", g_grave: "Refuerzo de grave", g_proteccion: "Protección",
     dsp: "Corrección activa", limitador: "Limitador y grave dinámico", ganancia: "Ganancia previa", pasoalto: "Paso alto (0 = quitado)",
     joroba_f: "Frecuencia", joroba_db: "Nivel", joroba_q: "Q (anchura)", grave_f: "Frecuencia", grave_db: "Nivel", grave_q: "Q (anchura)",
     gravesmax: "Grave máximo", techo: "Techo de salida",
-    guardar: "Guardar en el ESP32", deshacer: "Deshacer cambios", fabrica: "Valores de fábrica (JVC)", bajar: "Descargar perfil", subir: "Cargar perfil",
+    guardar: "Guardar en el ESP32", deshacer: "Deshacer cambios", fabrica: "Sin corrección (fábrica)", bajar: "Descargar perfil", subir: "Cargar perfil",
     registro: "Mensajes del ESP32", cancelar: "Cancelar", continuar: "Continuar", sinGuardar: "Cambios sin guardar", guardado: "Guardado en el ESP32",
     noSerie: "Este navegador no tiene Web Serial. Usa Chrome o Edge en un ordenador; aquí puedes ver curvas y perfiles.",
     noResponde: "El ESP32 no responde como TuneAmp32. Comprueba el firmware y que has elegido el puerto correcto.",
@@ -26,7 +26,7 @@ const T = {
     fallo: "El ESP32 no ha aceptado el cambio; se muestran sus ajustes reales.", noGuardado: "No se ha podido guardar.",
     malPerfil: "El archivo no es un perfil válido de TuneAmp32", perfilOk: "Perfil cargado", nombrePerfil: "Nombre del perfil (altavoz):",
     pideRefuerzo: "Un refuerzo de grave de más de 6 dB puede dañar un altavoz que no lo aguante. ¿Continuar?",
-    pideSin: "Esto quita el paso alto que protege el altavoz. Baja el volumen antes. ¿Continuar?",
+    pideSin: "Esto quita el paso alto que protege el altavoz y puede sonar más fuerte. Baja el volumen antes. ¿Continuar?",
     pideLim: "Sin limitador se desactiva también la reducción automática del grave. ¿Continuar?",
     margenMal: (x) => `La corrección sube hasta ${x} dB por encima del máximo: el limitador actuará a volumen alto. Baja la ganancia previa.`,
     margenBien: (x) => `Margen: ${x} dB antes de llegar al máximo digital.`,
@@ -34,14 +34,14 @@ const T = {
   en: {
     panel: "· Panel", otro: "Español", conectar: "Connect", desconectar: "Disconnect",
     conectado: "Connected", sin: "Not connected", curva: "Correction curve",
-    ejemplo: "Example measurement (JVC CS-J520X)", medida: "JVC measured", correccion: "Correction", prevista: "Predicted",
-    notaCurva: "Relative levels, without pre-gain and with full bass boost. The measurement is from the JVCs: with another speaker only the correction curve applies.",
+    ejemplos: "Examples", elige: "Choose an example…", verMedida: "Show the example measurement", medida: "Measured", correccion: "Correction", prevista: "Predicted",
+    notaCurva: "Relative levels, without pre-gain and with full bass boost. Examples are for that exact speaker: on another one they may sound bad or damage it.",
     tabla: "View as table", frec: "Frequency", ePico: "Output peak", eGrave: "Bass reduction", eLim: "Limiter", eRec: "Clipped samples", eCarga: "DSP load",
     g_general: "General", g_joroba: "Hump (resonance)", g_grave: "Bass boost", g_proteccion: "Protection",
     dsp: "Correction on", limitador: "Limiter and dynamic bass", ganancia: "Pre-gain", pasoalto: "High-pass (0 = off)",
     joroba_f: "Frequency", joroba_db: "Level", joroba_q: "Q (width)", grave_f: "Frequency", grave_db: "Level", grave_q: "Q (width)",
     gravesmax: "Bass maximum", techo: "Output ceiling",
-    guardar: "Save to ESP32", deshacer: "Undo changes", fabrica: "Factory values (JVC)", bajar: "Download profile", subir: "Load profile",
+    guardar: "Save to ESP32", deshacer: "Undo changes", fabrica: "No correction (factory)", bajar: "Download profile", subir: "Load profile",
     registro: "ESP32 messages", cancelar: "Cancel", continuar: "Continue", sinGuardar: "Unsaved changes", guardado: "Saved to ESP32",
     noSerie: "This browser has no Web Serial. Use Chrome or Edge on a computer; here you can still view curves and profiles.",
     noResponde: "The ESP32 does not answer as TuneAmp32. Check the firmware and the chosen port.",
@@ -50,7 +50,7 @@ const T = {
     fallo: "The ESP32 rejected the change; its real settings are shown.", noGuardado: "Could not save.",
     malPerfil: "Not a valid TuneAmp32 profile", perfilOk: "Profile loaded", nombrePerfil: "Profile name (speaker):",
     pideRefuerzo: "More than 6 dB of bass boost can damage a speaker that cannot take it. Continue?",
-    pideSin: "This removes the high-pass that protects the speaker. Turn the volume down first. Continue?",
+    pideSin: "This removes the high-pass that protects the speaker and may sound louder. Turn the volume down first. Continue?",
     pideLim: "Without the limiter, automatic bass reduction is off too. Continue?",
     margenMal: (x) => `The correction rises up to ${x} dB above full scale: the limiter will act at high volume. Lower the pre-gain.`,
     margenBien: (x) => `Headroom: ${x} dB before digital full scale.`,
@@ -275,7 +275,7 @@ $("guardar").onclick = async () => {
   } catch { avisar(t("noGuardado")); }
 };
 $("deshacer").onclick = () => base && cambiar(base);
-$("fabrica").onclick = () => cambiar(FABRICA);
+$("fabrica").onclick = async () => { if (await cambiar(FABRICA)) quitarMedida(); };
 $("bajar").onclick = () => {
   const nombre = prompt(t("nombrePerfil"), nombrePerfil);
   if (nombre === null) return;
@@ -298,9 +298,35 @@ $("archivo").onchange = async (ev) => {
   } catch (e) { avisar(`${t("malPerfil")} (${e instanceof SyntaxError ? "JSON" : e.message}).`); return; }
   avisar();
   if (await cambiar(r.ajustes)) {
+    quitarMedida();
     nombrePerfil = r.nombre;
     $("pendiente").textContent = `${t("perfilOk")}: ${r.nombre || f.name}`;
   }
+};
+
+// Ejemplos: perfiles publicados en docs/perfiles/
+let ejemplos = [], actual = "";
+function quitarMedida() { medida = null; actual = ""; $("ejemplo").value = ""; pintar(); }
+function listarEjemplos() {
+  const s = $("ejemplo"), v = s.value;
+  s.replaceChildren(new Option(t("elige"), ""), ...ejemplos.map((e, i) => new Option(`${i + 1}. ${e.nombre}`, e.archivo)));
+  s.value = v;
+}
+$("ejemplo").onchange = async () => {
+  const archivo = $("ejemplo").value;
+
+  if (!archivo) { quitarMedida(); return; }
+  let r, m = null;
+  try {
+    r = leerPerfil(await (await fetch("../perfiles/" + archivo)).text());
+    if (r.medida) m = await (await fetch("../perfiles/" + r.medida)).json();
+  } catch { quitarMedida(); avisar(t("malPerfil")); return; }
+  if (!await cambiar(r.ajustes)) { $("ejemplo").value = actual; return; }
+  actual = archivo;
+  medida = m;
+  nombrePerfil = r.nombre;
+  pintar();
+  $("pendiente").textContent = `${t("perfilOk")}: ${r.nombre}`;
 };
 $("idioma").onclick = () => {
   idioma = idioma === "es" ? "en" : "es";
@@ -412,6 +438,7 @@ function pintar(q = p) {
   $("guardar").disabled = !si;
   $("deshacer").disabled = !si || !base || comandosEntre(base, p).length === 0;
   $("pendiente").textContent = si && sucio ? t("sinGuardar") : "";
+  $("filaMedida").hidden = !medida;
   dibujar(q);
 }
 
@@ -420,10 +447,11 @@ function traducir() {
   for (const e of document.querySelectorAll("[data-t]")) e.textContent = t(e.dataset.t);
   $("idioma").textContent = t("otro");
   crearMandos();
+  listarEjemplos();
   pintar();
   if (!Serie.disponible()) avisar(t("noSerie"));
 }
 
 new ResizeObserver(() => dibujar(p)).observe($("marco"));
 traducir();
-fetch("jvc_cerca_I.json").then((r) => r.json()).then((j) => { medida = j; pintar(); }).catch(() => {});
+fetch("../perfiles/indice.json").then((r) => r.json()).then((j) => { ejemplos = j; listarEjemplos(); }).catch(() => {});

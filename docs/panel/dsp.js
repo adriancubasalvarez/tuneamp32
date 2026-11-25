@@ -18,11 +18,11 @@ export const PARAMS = {
 };
 export const INTERRUPTORES = ["dsp", "limitador"];
 
-// Valores de fábrica del firmware actual (cápsulas JVC CS-J520X)
+// Valores de fábrica del firmware: sin corrección (para cualquier altavoz)
 export const FABRICA = {
-  dsp: true, limitador: true, ganancia: -7, pasoalto: 65,
-  joroba_f: 167, joroba_db: -9.8, joroba_q: 2.11,
-  grave_f: 75, grave_db: 9, grave_q: 0.91, gravesmax: -6, techo: -1,
+  dsp: true, limitador: true, ganancia: -1, pasoalto: 0,
+  joroba_f: 150, joroba_db: 0, joroba_q: 1,
+  grave_f: 80, grave_db: 0, grave_q: 1, gravesmax: -6, techo: -1,
 };
 
 export function pasoAlto(f0, q = 0.7071, fs = FS) {
@@ -114,7 +114,8 @@ export function leerPerfil(texto) {
     if (typeof v !== "number" || !Number.isFinite(v) || v < d.min || v > d.max) throw new Error(k);
     p[k] = +v.toFixed(d.dec);
   }
-  return { nombre: String(j.nombre ?? "").slice(0, 80), ajustes: p };
+  const medida = typeof j.medida === "string" && /^[\w-]+\.json$/.test(j.medida) ? j.medida : null;
+  return { nombre: String(j.nombre ?? "").slice(0, 80), ajustes: p, medida };
 }
 
 export function escribirPerfil(nombre, p) {

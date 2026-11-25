@@ -1,5 +1,8 @@
 // =====================================================================
-// Corrección DSP (Digital Signal Processing) de TuneAmp32 (valores de fábrica: JVC CS-J520X)
+// Corrección DSP (Digital Signal Processing) de TuneAmp32
+//
+// De fábrica no corrige nada: sirve para cualquier altavoz. Cada altavoz
+// tiene su perfil (docs/perfiles/) o se mide el suyo.
 //
 // Cadena, igual en los dos canales:
 //   ganancia previa -> paso alto -> corte de la joroba
@@ -28,14 +31,14 @@
 
 struct AjustesDSP {
   bool activo = true;          // false: solo ganancia previa y limitador (para comparar)
-  float ganancia_db = -7.0f;   // margen para que el refuerzo no recorte
-  float pasoalto_hz = 65.0f;   // 0 = sin paso alto
-  float joroba_hz = 167.0f;    // filtro de pico que baja la resonancia
-  float joroba_db = -9.8f;
-  float joroba_q = 2.11f;
-  float grave_hz = 75.0f;      // filtro de pico que refuerza el grave
-  float grave_db = 9.0f;
-  float grave_q = 0.91f;
+  float ganancia_db = -1.0f;   // margen; justo por debajo del techo del limitador
+  float pasoalto_hz = 0.0f;    // 0 = sin paso alto
+  float joroba_hz = 150.0f;    // filtro de pico que baja la resonancia
+  float joroba_db = 0.0f;      // 0 = sin efecto
+  float joroba_q = 1.0f;
+  float grave_hz = 80.0f;      // filtro de pico que refuerza el grave
+  float grave_db = 0.0f;       // 0 = sin efecto
+  float grave_q = 1.0f;
   bool limitador = true;       // refuerzo dinámico + limitador final
   float graves_max_db = -6.0f; // nivel de grave (dBFS) a partir del que se reduce el refuerzo
   float techo_db = -1.0f;      // nivel máximo de salida (dBFS)

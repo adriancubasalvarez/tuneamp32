@@ -6,7 +6,9 @@ Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un 
 
 > **Estado: en desarrollo.** Código recién traído de Radio Mundial; probado en la placa. Herramientas web en marcha (`docs/panel`).
 
-> ⚠️ **Los valores de fábrica son para las JVC CS-J520X** (refuerzo de grave de hasta +9 dB). Con cualquier otro altavoz, manda `dsp off` por el puerto serie **antes de poner música**, `guardar` para conservarlo, y mide primero. `dsp off` también quita el paso alto de protección. Habrá un perfil neutro.
+> **Para cualquier altavoz.** De fábrica TuneAmp32 **no corrige nada** (solo −1 dB de ganancia y un limitador). Tampoco lleva paso alto: **empieza con el volumen bajo**, sobre todo con altavoces pequeños. Los ajustes guardados con una versión anterior mandan sobre los de fábrica: manda `fabrica` y luego `guardar`.
+>
+> **Ejemplo 1:** [JVC CS-J520X en altavoz de gota](docs/perfiles/jvc_cs-j520x_gota.json), de Adrián. Úsalo solo con ese altavoz.
 
 | Carpeta | Contenido |
 |---|---|
@@ -14,7 +16,7 @@ Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un 
 | [`medidas`](medidas) | Scripts de medida y corrección, resultados de las JVC |
 | [`hardware`](hardware) | Conexionado |
 | [`carcasa/altavoz_gota_jvc`](carcasa/altavoz_gota_jvc) | Altavoz de gota JVC, archivos 3D |
-| [`docs`](docs) | Documentos del proyecto |
+| [`docs`](docs) | Panel web, perfiles de altavoces y documentos |
 
 ## Compilar
 

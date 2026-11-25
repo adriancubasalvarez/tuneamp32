@@ -10,4 +10,4 @@ Lee `docs/TUNEAMP32_ARRANQUE.md` entero antes de proponer nada.
 6. `main` de Radio Mundial no se toca.
 
 Estado: R1 hecha y probada en la placa con DAC. W1 (panel en docs/panel) escrita; falta probarla en Chrome con la placa. Probar: `python -m http.server 8032 --bind 127.0.0.1 -d docs` y abrir http://localhost:8032/panel/. Protección de acceso Bluetooth: aplazada.
-Antes de publicar el instalador web (R4) hace falta el perfil neutro: los valores de fábrica son de las JVC.
+Objetivo: mejorar cualquier altavoz. De fábrica, sin corrección y sin paso alto (R1c); las JVC son el ejemplo 1 (`docs/perfiles/`). La protección se elige al medir cada altavoz (W2/W3), sin rangos fijos de las JVC.

@@ -6,7 +6,9 @@ An ESP32 Bluetooth amplifier that **tunes itself to your speakers**: measure wit
 
 > **Status: in development.** Code just moved here from Radio Mundial; tested on the board. Web tools in progress (`docs/panel`).
 
-> ⚠️ **The factory settings are for the JVC CS-J520X** (bass boost up to +9 dB). With any other speaker, send `dsp off` over serial **before playing music**, then `guardar` to keep it, and measure first. `dsp off` also disables the protective high-pass. A neutral profile is planned.
+> **For any speaker.** From the factory TuneAmp32 applies **no correction** (only −1 dB of gain and a limiter). There is no high-pass either, so **start with the volume low**, especially with small speakers. Saved settings from an older version take priority: send `fabrica` and then `guardar`.
+>
+> **Example 1:** [JVC CS-J520X in a teardrop pod](docs/perfiles/jvc_cs-j520x_gota.json), by Adrián. Use it only with that speaker.
 
 | Folder | Contents |
 |---|---|
@@ -14,7 +16,7 @@ An ESP32 Bluetooth amplifier that **tunes itself to your speakers**: measure wit
 | [`medidas`](medidas) | Measuring and correction scripts, JVC results |
 | [`hardware`](hardware) | Wiring |
 | [`carcasa/altavoz_gota_jvc`](carcasa/altavoz_gota_jvc) | JVC teardrop speaker, 3D files |
-| [`docs`](docs) | Project documents |
+| [`docs`](docs) | Web panel, speaker profiles and project documents |
 
 ## Build
 

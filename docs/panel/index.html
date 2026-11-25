@@ -23,8 +23,9 @@
   <section class="tarjeta">
     <div class="cabecera">
       <h1 data-t="curva"></h1>
-      <label class="check"><input type="checkbox" id="verMedida" checked> <span data-t="ejemplo"></span></label>
+      <label class="check"><span data-t="ejemplos"></span> <select id="ejemplo"></select></label>
     </div>
+    <label class="check" id="filaMedida" hidden><input type="checkbox" id="verMedida" checked> <span data-t="verMedida"></span></label>
     <div id="leyenda" class="leyenda"></div>
     <div id="marco"><svg id="grafico" role="img" tabindex="0"></svg><div id="globo" hidden></div></div>
     <p class="nota" data-t="notaCurva"></p>

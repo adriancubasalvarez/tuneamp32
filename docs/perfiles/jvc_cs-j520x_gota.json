@@ -1,0 +1,20 @@
+{
+  "formato": "tuneamp32-perfil",
+  "version": 1,
+  "nombre": "JVC CS-J520X, altavoz de gota (Adrián)",
+  "medida": "jvc_cs-j520x_gota_medida.json",
+  "ajustes": {
+    "dsp": true,
+    "limitador": true,
+    "ganancia": -7,
+    "pasoalto": 65,
+    "joroba_f": 167,
+    "joroba_db": -9.8,
+    "joroba_q": 2.11,
+    "grave_f": 75,
+    "grave_db": 9,
+    "grave_q": 0.91,
+    "gravesmax": -6,
+    "techo": -1
+  }
+}
