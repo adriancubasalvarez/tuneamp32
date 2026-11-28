@@ -1,0 +1,3 @@
+comun.py
+analisis.py
+propuesta.py

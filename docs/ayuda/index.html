@@ -26,7 +26,7 @@
 <body>
 <header>
   <div class="marca">TuneAmp32</div>
-  <div class="acciones"><a class="boton" href="../panel/">Panel</a><button id="idioma">English</button></div>
+  <div class="acciones"><a class="boton" href="../panel/">Panel</a><a class="boton" href="../analizar/" id="enlaceAnalizar">Analizar</a><button id="idioma">English</button></div>
 </header>
 <main>
 
@@ -58,13 +58,13 @@
     <div class="desliza"><table>
       <tr><th>Paso</th><th>Qué pasa</th><th>Estado</th></tr>
       <tr><td>1. Conectar</td><td>El panel lee los ajustes del ESP32 por el cable USB.</td><td class="hecho">Disponible</td></tr>
-      <tr><td>2. Medir</td><td>Suenan unos barridos, y un micro a 1 cm del cono los graba.</td><td class="falta">De momento, con los programas de PC</td></tr>
-      <tr><td>3. Diagnosticar</td><td>De la grabación sale la curva del altavoz.</td><td class="falta">De momento, con los programas de PC</td></tr>
-      <tr><td>4. Corregir</td><td>Se propone una corrección y tú la retocas escuchando.</td><td class="falta">Mandos disponibles; propuesta, en PC</td></tr>
-      <tr><td>5. Verificar</td><td>Se mide otra vez para ver el antes y el después.</td><td class="falta">De momento, con los programas de PC</td></tr>
+      <tr><td>2. Medir</td><td>El ESP32 genera unos barridos y un micro a 1 cm del cono los graba (por USB, sin Bluetooth en el PC).</td><td class="falta">De momento, con <code>medir.py --usb</code></td></tr>
+      <tr><td>3. Diagnosticar</td><td>De la grabación sale la curva del altavoz y sus problemas.</td><td class="hecho">Página <a href="../analizar/">Analizar</a></td></tr>
+      <tr><td>4. Corregir</td><td>Se proponen varias correcciones; eliges una, la pruebas y la retocas escuchando.</td><td class="hecho">Página Analizar y panel</td></tr>
+      <tr><td>5. Verificar</td><td>Se mide otra vez para ver el antes y el después.</td><td class="falta">Midiendo de nuevo y analizando</td></tr>
       <tr><td>6. Compartir</td><td>El perfil se guarda en un archivo para otros altavoces iguales.</td><td class="hecho">Archivo disponible</td></tr>
     </table></div>
-    <p class="nota">Los programas de PC están en la carpeta <code>medidas</code> del proyecto. Su propuesta automática está pensada aún para el altavoz del ejemplo 1.</p>
+    <p class="nota">Los programas de PC están en la carpeta <code>medidas</code> del proyecto.</p>
   </section>
 
   <section class="tarjeta">
@@ -146,13 +146,13 @@
     <div class="desliza"><table>
       <tr><th>Step</th><th>What happens</th><th>Status</th></tr>
       <tr><td>1. Connect</td><td>The panel reads the ESP32 settings over the USB cable.</td><td class="hecho">Available</td></tr>
-      <tr><td>2. Measure</td><td>Sweeps are played and a mic 1 cm from the cone records them.</td><td class="falta">PC programs for now</td></tr>
-      <tr><td>3. Diagnose</td><td>The recording gives the speaker's curve.</td><td class="falta">PC programs for now</td></tr>
-      <tr><td>4. Correct</td><td>A correction is proposed and you fine-tune it by ear.</td><td class="falta">Controls available; proposal on PC</td></tr>
-      <tr><td>5. Verify</td><td>Measure again to see before and after.</td><td class="falta">PC programs for now</td></tr>
+      <tr><td>2. Measure</td><td>The ESP32 plays sweeps and a mic 1 cm from the cone records them (over USB, no Bluetooth on the PC).</td><td class="falta">For now with <code>medir.py --usb</code></td></tr>
+      <tr><td>3. Diagnose</td><td>The recording gives the speaker's curve and its problems.</td><td class="hecho"><a href="../analizar/">Analyze</a> page</td></tr>
+      <tr><td>4. Correct</td><td>Several corrections are proposed; pick one, try it and fine-tune it by ear.</td><td class="hecho">Analyze page and panel</td></tr>
+      <tr><td>5. Verify</td><td>Measure again to see before and after.</td><td class="falta">Measure again and analyze</td></tr>
       <tr><td>6. Share</td><td>The profile is saved to a file for identical speakers.</td><td class="hecho">File available</td></tr>
     </table></div>
-    <p class="nota">The PC programs are in the project's <code>medidas</code> folder. Their automatic proposal is still designed for the example 1 speaker.</p>
+    <p class="nota">The PC programs are in the project's <code>medidas</code> folder.</p>
   </section>
 
   <section class="tarjeta">
@@ -216,6 +216,7 @@
     for (const a of document.querySelectorAll("article")) a.hidden = a.lang !== idioma;
     document.getElementById("idioma").textContent = idioma === "es" ? "English" : "Español";
     document.title = idioma === "es" ? "TuneAmp32 · Cómo funciona" : "TuneAmp32 · How it works";
+    document.getElementById("enlaceAnalizar").textContent = idioma === "es" ? "Analizar" : "Analyze";
   };
   document.getElementById("idioma").onclick = () => {
     idioma = idioma === "es" ? "en" : "es";

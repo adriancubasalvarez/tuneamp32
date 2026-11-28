@@ -1,0 +1,20 @@
+h1 { font-size: 18px; }
+.orden { background: var(--fondo); border: 1px solid var(--malla); border-radius: 8px; padding: 8px 10px;
+  font-size: 13px; overflow-x: auto; white-space: pre; margin: 8px 0 0; }
+.campos { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 12px; }
+.campo { display: grid; gap: 4px; font-size: 13px; color: var(--tinta2); min-width: 0; }
+.campo input[type=file] { font: inherit; color: var(--tinta); max-width: 100%; }
+.campo .fila { display: flex; gap: 6px; align-items: center; color: var(--tinta); }
+.campo input[type=number] { width: 84px; font: inherit; padding: 4px 6px; border: 1px solid var(--eje);
+  border-radius: 6px; background: var(--fondo); color: var(--tinta); }
+.datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 16px; margin: 10px 0 0; }
+.datos dt { font-size: 13px; color: var(--tinta2); } .datos dd { margin: 0; font-size: 18px; font-weight: 600; }
+.avisos { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.avisos li { border-left: 3px solid var(--critico); padding: 4px 10px; font-size: 14px; }
+.avisos li.bien { border-left-color: var(--s3); }
+.opciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0 6px; }
+.opcion { display: grid; gap: 4px; text-align: left; border: 1px solid var(--eje); border-radius: 10px;
+  padding: 10px 12px; background: var(--sup); color: var(--tinta); cursor: pointer; font-size: 13px; }
+.opcion b { font-size: 15px; } .opcion .gris { color: var(--tinta2); }
+.opcion[aria-checked=true] { border: 2px solid var(--accion); padding: 9px 11px; }
+.opcion .mal { color: var(--critico); }

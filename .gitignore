@@ -4,3 +4,4 @@ build/
 __pycache__/
 *.pyc
 .claude/
+docs/analizar/_prueba*

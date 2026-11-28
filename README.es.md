@@ -16,7 +16,7 @@ Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un 
 | [`medidas`](medidas) | Scripts de medida y corrección, resultados de las JVC |
 | [`hardware`](hardware) | Conexionado |
 | [`carcasa/altavoz_gota_jvc`](carcasa/altavoz_gota_jvc) | Altavoz de gota JVC, archivos 3D |
-| [`docs`](docs) | Panel web, perfiles de altavoces y documentos |
+| [`docs`](docs) | Herramientas web (panel, analizar), perfiles de altavoces y documentos |
 
 ¿Es tu primera vez? Lee [Cómo funciona](docs/ayuda/index.html) (ábrelo en el navegador).
 

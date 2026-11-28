@@ -115,7 +115,12 @@ export function leerPerfil(texto) {
     p[k] = +v.toFixed(d.dec);
   }
   const medida = typeof j.medida === "string" && /^[\w-]+\.json$/.test(j.medida) ? j.medida : null;
-  return { nombre: String(j.nombre ?? "").slice(0, 80), ajustes: p, medida };
+  // Curva medida incluida en el perfil (la añade la página «Analizar»)
+  const c = j.curva;
+  const curva = c && Array.isArray(c.f) && Array.isArray(c.db) && c.f.length === c.db.length &&
+    c.f.length > 10 && c.f.length < 5000 && [...c.f, ...c.db].every((x) => typeof x === "number" && Number.isFinite(x)) &&
+    c.f.every((x, i) => x > 0 && (i === 0 || x > c.f[i - 1])) ? { f: c.f, db: c.db } : null;
+  return { nombre: String(j.nombre ?? "").slice(0, 80), ajustes: p, medida, curva };
 }
 
 export function escribirPerfil(nombre, p) {

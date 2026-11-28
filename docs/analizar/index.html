@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneAmp32 · Analizar</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../panel/panel.css">
+<link rel="stylesheet" href="analizar.css">
+</head>
+<body>
+<header>
+  <div class="marca">TuneAmp32 <span data-t="titulo"></span></div>
+  <div class="acciones">
+    <span id="conexion" class="chip" role="status"></span>
+    <button id="conectar"></button>
+    <a class="boton" href="../panel/" data-t="panel"></a>
+    <a class="boton" href="../ayuda/" data-t="ayuda"></a>
+    <button id="idioma"></button>
+  </div>
+</header>
+
+<main>
+  <p id="aviso" class="aviso" role="alert" hidden></p>
+
+  <section class="tarjeta">
+    <h1 data-t="paso1"></h1>
+    <p class="nota" data-t="explica1"></p>
+    <pre class="orden">python medidas/medir.py --usb --nombre mi_altavoz_I --canal I --dbfs -30 --fmin 30</pre>
+    <div class="campos">
+      <label class="campo"><span data-t="archivo"></span><input type="file" id="wav" accept=".wav,audio/wav"></label>
+      <label class="campo"><span data-t="fmin"></span>
+        <span class="fila"><input type="number" id="fmin" value="30" min="0" max="200" step="1"> Hz</span></label>
+    </div>
+    <p class="nota" data-t="explicaFmin"></p>
+    <p id="estado" class="nota" role="status"></p>
+  </section>
+
+  <div id="resultado" hidden>
+    <section class="tarjeta">
+      <h2 data-t="paso2"></h2>
+      <dl id="diagnostico" class="datos"></dl>
+      <ul id="avisos" class="avisos"></ul>
+    </section>
+
+    <section class="tarjeta">
+      <div class="cabecera"><h2 data-t="paso3"></h2></div>
+      <div id="opciones" class="opciones" role="radiogroup"></div>
+      <div id="leyenda" class="leyenda"></div>
+      <div id="marco"><svg id="grafico" role="img" tabindex="0"></svg><div id="globo" hidden></div></div>
+      <p class="nota" data-t="notaGrafica"></p>
+      <details><summary data-t="tabla"></summary><div class="desliza"><table id="tabla"></table></div></details>
+    </section>
+
+    <section class="tarjeta">
+      <h2 data-t="paso4"></h2>
+      <p class="nota" data-t="explica4"></p>
+      <div class="barra">
+        <button id="probar" class="principal" data-t="probar"></button>
+        <button id="guardar" data-t="guardar"></button>
+        <button id="quitar" data-t="quitar"></button>
+        <span class="separa"></span>
+        <button id="bajar" data-t="bajar"></button>
+      </div>
+      <p id="estadoPlaca" class="nota" role="status"></p>
+      <details><summary data-t="comandos"></summary><pre id="comandos" class="orden"></pre></details>
+    </section>
+  </div>
+</main>
+
+<dialog id="dialogo">
+  <p id="pregunta"></p>
+  <div class="barra"><button id="no" data-t="cancelar"></button><button id="si" class="principal" data-t="continuar"></button></div>
+</dialog>
+<script type="module" src="analizar.js"></script>
+</body>
+</html>

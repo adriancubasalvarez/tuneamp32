@@ -9,7 +9,7 @@ const REFUERZO_AVISO = 6;                 // dB: por encima se pide confirmació
 // ------------------------------------------------------------------ textos
 const T = {
   es: {
-    panel: "· Panel", otro: "English", ayuda: "Cómo funciona", queEs: "Qué es", conectar: "Conectar", desconectar: "Desconectar",
+    panel: "· Panel", otro: "English", analizar: "Analizar", ayuda: "Cómo funciona", queEs: "Qué es", conectar: "Conectar", desconectar: "Desconectar",
     conectado: "Conectado", sin: "Sin conectar", curva: "Curva de corrección",
     ejemplos: "Ejemplos", elige: "Elige un ejemplo…", verMedida: "Ver la medida del ejemplo", medida: "Medida", correccion: "Corrección", prevista: "Prevista",
     notaCurva: "Niveles relativos, sin la ganancia previa y con el refuerzo de grave completo. Los ejemplos son para ese altavoz concreto: en otro pueden sonar mal o dañarlo.",
@@ -33,7 +33,7 @@ const T = {
     margenBien: (x) => `Margen: ${x} dB antes de llegar al máximo digital.`,
   },
   en: {
-    panel: "· Panel", otro: "Español", ayuda: "How it works", queEs: "What is", conectar: "Connect", desconectar: "Disconnect",
+    panel: "· Panel", otro: "Español", analizar: "Analyze", ayuda: "How it works", queEs: "What is", conectar: "Connect", desconectar: "Disconnect",
     conectado: "Connected", sin: "Not connected", curva: "Correction curve",
     ejemplos: "Examples", elige: "Choose an example…", verMedida: "Show the example measurement", medida: "Measured", correccion: "Correction", prevista: "Predicted",
     notaCurva: "Relative levels, without pre-gain and with full bass boost. Examples are for that exact speaker: on another one they may sound bad or damage it.",
@@ -75,17 +75,20 @@ const serie = new Serie({ alRecibir: recibir, alCerrar: cerrado });
 
 function avisar(texto) { $("aviso").textContent = texto ?? ""; $("aviso").hidden = !texto; }
 
+// Pregunta con el cuadro de diálogo. Responden los botones (o Escape = no);
+// no se usa el evento «close», que algunos navegadores retrasan.
+let responder = null;
 function preguntar(texto) {
   return new Promise((resolver) => {
     const d = $("dialogo");
     $("pregunta").textContent = texto;
-    d.returnValue = "no";
-    d.onclose = () => resolver(d.returnValue === "si");
+    responder = (si) => { responder = null; if (d.open) d.close(); resolver(si); };
     d.showModal();
   });
 }
-$("si").onclick = () => $("dialogo").close("si");
-$("no").onclick = () => $("dialogo").close("no");
+$("si").onclick = () => responder?.(true);
+$("no").onclick = () => responder?.(false);
+$("dialogo").oncancel = (e) => { e.preventDefault(); responder?.(false); };
 
 // Pregunta por todo lo arriesgado que hay al pasar de «de» a «a»
 async function confirmar(de, a) {
@@ -314,6 +317,7 @@ $("archivo").onchange = async (ev) => {
   avisar();
   if (await cambiar(r.ajustes)) {
     quitarMedida();
+    if (r.curva) { medida = r.curva; pintar(); }
     nombrePerfil = r.nombre;
     $("pendiente").textContent = `${t("perfilOk")}: ${r.nombre || f.name}`;
   }

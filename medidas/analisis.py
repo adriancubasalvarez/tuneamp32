@@ -286,7 +286,7 @@ def analizar(ruta, nombre, tipo, ventana_ms, canal, f_max_cerca, f_min_medida=0.
             if nivel[i] > 1.5:
                 joroba = dict(f=float(F_SALIDA[i]), db=float(nivel[i]))
 
-    reflex = buscar_reflex(nivel, caja, valida) if caja else None
+    reflex = buscar_reflex(nivel, ruido_rel, caja, valida) if caja else None
     if reflex:
         avisos.append(f"Hueco de {reflex['db']:.0f} dB a {reflex['f']:.0f} Hz: parece una caja bass reflex "
                       "(o con radiador pasivo). Con el micro en el cono no se oye el puerto: no se "
@@ -353,11 +353,12 @@ def medir_rebotes(h, pico):
     return 10 * np.log10(max(energia(5, 50), 1e-30) / max(energia(-0.2, 2), 1e-30))
 
 
-def buscar_reflex(nivel, caja, valida):
+def buscar_reflex(nivel, ruido, caja, valida):
     """Un hueco estrecho y hondo por debajo de la resonancia es lo típico del
     cono de una caja bass reflex (el puerto se lleva el sonido en su
     frecuencia). Se compara cada punto con la media de la curva media octava
-    por encima y por debajo: en una caída normal sale casi 0."""
+    por encima y por debajo: en una caída normal sale casi 0. Los dos lados
+    tienen que oírse bien (no vale un hueco en el suelo de ruido)."""
     k = 2 ** 0.5
     def v(f):
         return np.interp(np.log(f), np.log(F_SALIDA), nivel)
@@ -366,7 +367,9 @@ def buscar_reflex(nivel, caja, valida):
     if not np.any(m):
         return None
     f = F_SALIDA[m]
-    resto = v(f) - (v(f / k) + v(f * k)) / 2
+    lados = np.minimum(v(f / k), v(f * k))
+    se_oye = (lados > -25) & (lados > np.interp(np.log(f), np.log(F_SALIDA), ruido) + 15)
+    resto = np.where(se_oye, v(f) - (v(f / k) + v(f * k)) / 2, 0.0)
     i = int(np.argmin(resto))
     if resto[i] < -HUECO_REFLEX_DB:
         return dict(f=float(f[i]), db=float(-resto[i]))
