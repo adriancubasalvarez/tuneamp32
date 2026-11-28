@@ -3,6 +3,7 @@
 // misma conexión y comandos que el panel.
 import { FABRICA, comandosEntre, leerAjustes, escribirPerfil } from "../panel/dsp.js";
 import { Serie } from "../panel/serie.js";
+import { Grabadora, microfonos, permiso, grabar, ajustarNivel, wav, niveles, NIVEL_MAX } from "./medida.js";
 
 const $ = (id) => document.getElementById(id);
 const REFUERZO_AVISO = 6;
@@ -27,15 +28,28 @@ const T = {
     p2: "2. Deja el altavoz sin corrección",
     p2Intro: "Para medir el altavoz tal cual es, el ESP32 tiene que estar sin corrección. Conéctalo por USB y pulsa el botón.",
     conectar: "Conectar y quitar la corrección", reconectar: "Volver a conectar",
-    p2Nota: "No se guarda nada: los ajustes guardados del ESP32 no cambian. Al pasar al paso siguiente, la página suelta el puerto USB para que lo use el programa de medida.",
+    p2Nota: "No se guarda nada: los ajustes guardados del ESP32 no cambian.",
     listo2: "Listo: el ESP32 está sin corrección.", falta2: "Conecta el ESP32 y quita la corrección.",
     p3: "3. Mide el altavoz",
-    p3Intro: "Por ahora la medida se hace con un programa del ordenador. Abre PowerShell en la carpeta de TuneAmp32 y copia estos comandos.",
-    p3a: "Primero, comprueba el nivel (10 s)",
-    p3aNota: "Repítelo subiendo poco a poco el volumen del amplificador hasta que diga «CORRECTO». Si dice «DEMASIADO ALTO», usa el nivel que te sugiere aquí:",
-    nivel: "Nivel de la señal (dBFS)",
-    p3b: "Después, la medida (69 s)", p3bNota: "Con el mismo volumen y sin mover el micrófono:",
-    p3c: "Por último, carga la grabación", copiar: "Copiar", copiado: "Copiado",
+    p3Intro: "El ESP32 hará sonar unos barridos y la página los grabará con el micrófono. Mantén esta pestaña a la vista mientras mide.",
+    p3m: "a) Micrófono", micro: "Micrófono de medida", permiso: "Permitir el micrófono",
+    sinMicros: "Pulsa «Permitir el micrófono» para ver la lista.", microOk: (n) => `Usando: ${n}`,
+    procesado: (p) => `⚠ El navegador no ha quitado este procesado del micrófono: ${p}. La medida puede salir alterada.`,
+    p3n: "b) Nivel", p3nNota: "Deja el volumen del amplificador bajo y fijo: la página ajusta sola el nivel de la señal con unos barridos cortos (10 s cada uno).",
+    ajustar: "Ajustar el nivel", nivelEs: (n) => `Nivel de la señal: ${n} dBFS`,
+    intento: (n, p) => `Barrido a ${n} dBFS: el micrófono recibe ${p} dBFS…`,
+    nivelOk: (n, p) => `✓ Nivel listo: ${n} dBFS (el micrófono recibe ${p} dBFS).`,
+    nollega: "⚠ El micrófono no oye el barrido. Comprueba que está junto al altavoz elegido, que el amplificador está encendido y que el micrófono elegido es el correcto.",
+    bajo: "⚠ Aun al máximo de la señal se oye poco: sube un poco el volumen del amplificador y vuelve a ajustar.",
+    alto: "⚠ Se oye demasiado aun con la señal al mínimo: baja el volumen del amplificador y vuelve a ajustar.",
+    p3b: "c) Medida (unos 70 s)", p3bNota: "Silencio en la habitación y sin mover nada.",
+    medir: "Medir", medirOtra: "Medir otra vez", cancelarMedida: "Parar", midiendo: "Midiendo… no toques nada.",
+    cancelada: "Medida parada.", fallida: (m) => `La medida ha fallado: ${m}.`,
+    cortes: "la señal se cortó (¿hay un móvil conectado por Bluetooth?)",
+    descargar: "Descargar la grabación (WAV)",
+    manual: "Medir con el programa del PC (alternativa)",
+    manualNota: "Si prefieres medir con medidas\\medir.py, pulsa «Soltar el puerto», ejecuta los comandos en PowerShell (en la carpeta de TuneAmp32) y carga aquí el WAV.",
+    soltar: "Soltar el puerto USB", nivel: "Nivel de la señal (dBFS)", copiar: "Copiar", copiado: "Copiado",
     dondeWav: (n) => `Está en la carpeta medidas\\grabaciones de TuneAmp32, con el nombre ${n}.wav`,
     archivo: "Grabación (WAV)", falta3: "Carga la grabación de la medida.",
     cargandoPython: "Preparando el análisis (la primera vez descarga unos 15 MB)…", cargandoNumpy: "Cargando numpy…",
@@ -55,7 +69,7 @@ const T = {
     potencia: (x) => `×${x} de potencia`, noRecomendable: "No recomendable",
     falta4: "Prueba una opción y déjala cargada en el ESP32.",
     p5: "5. Comprueba que funciona",
-    p5Intro: "Desconecta otra vez el Bluetooth del móvil, deja el micrófono donde estaba y mide de nuevo, ahora con la corrección puesta:",
+    p5Intro: "Desconecta otra vez el Bluetooth del móvil, deja el micrófono y el volumen como estaban y mide de nuevo, ahora con la corrección puesta.",
     falta5: "Carga la grabación de la verificación.",
     p6: "6. Guárdala",
     p6Intro: "Si te gusta cómo suena, guárdala en el ESP32: se mantendrá al apagarlo. Descarga también el perfil para guardarlo o compartirlo.",
@@ -91,15 +105,28 @@ const T = {
     p2: "2. Leave the speaker without correction",
     p2Intro: "To measure the speaker as it is, the ESP32 must have no correction. Connect it over USB and press the button.",
     conectar: "Connect and remove correction", reconectar: "Connect again",
-    p2Nota: "Nothing is saved: the ESP32's stored settings do not change. When you move on, the page releases the USB port so the measuring program can use it.",
+    p2Nota: "Nothing is saved: the ESP32's stored settings do not change.",
     listo2: "Done: the ESP32 has no correction.", falta2: "Connect the ESP32 and remove the correction.",
     p3: "3. Measure the speaker",
-    p3Intro: "For now the measurement is made by a program on the computer. Open PowerShell in the TuneAmp32 folder and copy these commands.",
-    p3a: "First, check the level (10 s)",
-    p3aNota: "Repeat it, raising the amplifier volume little by little, until it says «CORRECTO». If it says «DEMASIADO ALTO», enter the level it suggests here:",
-    nivel: "Signal level (dBFS)",
-    p3b: "Then the measurement (69 s)", p3bNota: "Same volume, without moving the microphone:",
-    p3c: "Finally, load the recording", copiar: "Copy", copiado: "Copied",
+    p3Intro: "The ESP32 will play some sweeps and the page will record them with the microphone. Keep this tab visible while measuring.",
+    p3m: "a) Microphone", micro: "Measurement microphone", permiso: "Allow the microphone",
+    sinMicros: "Press «Allow the microphone» to see the list.", microOk: (n) => `Using: ${n}`,
+    procesado: (p) => `⚠ The browser did not remove this microphone processing: ${p}. The measurement may be altered.`,
+    p3n: "b) Level", p3nNota: "Keep the amplifier volume low and fixed: the page sets the signal level by itself with short sweeps (10 s each).",
+    ajustar: "Set the level", nivelEs: (n) => `Signal level: ${n} dBFS`,
+    intento: (n, p) => `Sweep at ${n} dBFS: the microphone gets ${p} dBFS…`,
+    nivelOk: (n, p) => `✓ Level ready: ${n} dBFS (the microphone gets ${p} dBFS).`,
+    nollega: "⚠ The microphone does not hear the sweep. Check it is next to the chosen speaker, the amplifier is on and the right microphone is selected.",
+    bajo: "⚠ Even at the highest signal level it is quiet: raise the amplifier volume a little and set the level again.",
+    alto: "⚠ Too loud even at the lowest signal level: lower the amplifier volume and set the level again.",
+    p3b: "c) Measurement (about 70 s)", p3bNota: "Quiet room, and do not move anything.",
+    medir: "Measure", medirOtra: "Measure again", cancelarMedida: "Stop", midiendo: "Measuring… don't touch anything.",
+    cancelada: "Measurement stopped.", fallida: (m) => `The measurement failed: ${m}.`,
+    cortes: "the signal was interrupted (is a phone connected over Bluetooth?)",
+    descargar: "Download the recording (WAV)",
+    manual: "Measure with the PC program (alternative)",
+    manualNota: "If you prefer medidas\\medir.py, press «Release the port», run the commands in PowerShell (in the TuneAmp32 folder) and load the WAV here.",
+    soltar: "Release the USB port", nivel: "Signal level (dBFS)", copiar: "Copy", copiado: "Copied",
     dondeWav: (n) => `It is in the medidas\\grabaciones folder of TuneAmp32, named ${n}.wav`,
     archivo: "Recording (WAV)", falta3: "Load the measurement recording.",
     cargandoPython: "Preparing the analysis (about 15 MB the first time)…", cargandoNumpy: "Loading numpy…",
@@ -119,7 +146,7 @@ const T = {
     potencia: (x) => `×${x} power`, noRecomendable: "Not recommended",
     falta4: "Try an option and leave it loaded in the ESP32.",
     p5: "5. Check that it works",
-    p5Intro: "Disconnect the phone's Bluetooth again, leave the microphone where it was and measure again, now with the correction on:",
+    p5Intro: "Disconnect the phone's Bluetooth again, leave the microphone and volume as they were and measure again, now with the correction on.",
     falta5: "Load the verification recording.",
     p6: "6. Save it",
     p6Intro: "If you like how it sounds, save it to the ESP32: it is kept when powered off. Also download the profile to keep or share it.",
@@ -147,7 +174,9 @@ const fmt = (x, d = 1) => x.toLocaleString(idioma, { minimumFractionDigits: d, m
 const igual = (a, b) => !!a && !!b && comandosEntre(a, b).length === 0;
 
 // ------------------------------------------------------------------ estado
-const E = { paso: 1, datos: null, elegida: 0, verif: null, enPlaca: null, probada: null };
+const E = { paso: 1, datos: null, elegida: 0, verif: null, enPlaca: null, probada: null, nivelListo: false, midiendo: false };
+const grabadora = new Grabadora();
+let cancelar = null;
 const serie = new Serie({
   alRecibir: (l) => { if (E.enPlaca && l.startsWith("TuneAmp32 - ")) { E.enPlaca = null; E.probada = null; avisar(t("reiniciado")); pintar(); } },
   alCerrar: () => { E.enPlaca = null; pintar(); },
@@ -155,11 +184,13 @@ const serie = new Serie({
 
 // Lo que se recuerda entre visitas (comodidad; si falla, no pasa nada)
 function recordar() {
-  try { localStorage.setItem("asistente", JSON.stringify({ nombre: $("nombre").value, canal: $("canal").value, tamano: $("tamano").value, dbfs: $("dbfs")?.value })); } catch { /* da igual */ }
+  try { localStorage.setItem("asistente", JSON.stringify({ nombre: $("nombre").value, canal: $("canal").value, tamano: $("tamano").value, dbfs: $("dbfs")?.value, micro: $("micro").value || recordado.micro })); } catch { /* da igual */ }
 }
+let recordado = {};
 function recuperar() {
   try {
     const r = JSON.parse(localStorage.getItem("asistente") ?? "{}");
+    recordado = r;
     if (r.nombre) $("nombre").value = r.nombre;
     if (r.canal) $("canal").value = r.canal;
     if (r.tamano) $("tamano").value = r.tamano;
@@ -380,8 +411,6 @@ function falta() {
 $("siguiente").onclick = async () => {
   if (falta()) return;
   if (E.paso === N_PASOS) { location.reload(); return; }
-  // Al ir a medir, se suelta el puerto para el programa de medida
-  if (E.paso === 2 || E.paso === 4) await soltar();
   E.paso++;
   avisar();
   pintar();
@@ -460,7 +489,10 @@ function pintar() {
   $("falta").textContent = f ?? "";
   $("siguiente").disabled = !!f;
   $("siguiente").textContent = t(E.paso === N_PASOS ? "fin" : "siguiente");
-  $("atras").disabled = E.paso === 1;
+  $("atras").disabled = E.paso === 1 || E.midiendo;
+  if (E.midiendo) $("siguiente").disabled = true;
+  for (const id of ["ajustar", "medir", "medir5", "permiso", "soltar3", "soltar5", "micro"]) $(id).disabled = E.midiendo || !Serie.disponible();
+  $("nivelActual").textContent = t("nivelEs", dbfs());
 }
 
 function traducir() {
@@ -479,11 +511,122 @@ $("idioma").onclick = () => {
 let ancho = 0;
 new ResizeObserver(([e]) => { const w = Math.round(e.contentRect.width); if (w !== ancho) { ancho = w; pintar(); } }).observe(document.querySelector("main"));
 
+// ------------------------------------------------------------------ medir desde la página
+async function listarMicros() {
+  let lista = [];
+  try { lista = await microfonos(); } catch { /* sin permiso todavía */ }
+  const s = $("micro"), elegido = s.value || recordado.micro;
+  s.replaceChildren(...lista.map((d) => new Option(d.label || d.deviceId.slice(0, 8), d.deviceId)));
+  if (lista.some((d) => d.deviceId === elegido)) s.value = elegido;
+  else {
+    const dji = lista.find((d) => /wireless microphone|dji/i.test(d.label));
+    if (dji) s.value = dji.deviceId;
+  }
+  $("estadoMicro").textContent = lista.some((d) => d.label) ? "" : t("sinMicros");
+  $("permiso").hidden = lista.some((d) => d.label);
+}
+$("permiso").onclick = async () => {
+  try { await permiso(); } catch (e) { avisar(e.message); }
+  await listarMicros();
+};
+$("micro").onchange = () => { recordar(); };
+navigator.mediaDevices?.addEventListener?.("devicechange", listarMicros);
+
+async function prepararMedida(ajustesNecesarios) {
+  avisar();
+  if (!await conectar()) return false;
+  if (!igual(E.enPlaca, ajustesNecesarios) && !await enviar(ajustesNecesarios)) { avisar(t("fallo")); return false; }
+  await grabadora.abrir($("micro").value || undefined);
+  $("estadoMicro").textContent = t("microOk", grabadora.nombre) +
+    (grabadora.procesado.length ? " " + t("procesado", grabadora.procesado.join(", ")) : "");
+  return true;
+}
+
+function empezarMedida(boton) {
+  E.midiendo = true;
+  cancelar = { pedido: false };
+  $(boton).hidden = false;
+  pintar();
+}
+async function acabarMedida(boton) {
+  E.midiendo = false;
+  cancelar = null;
+  $(boton).hidden = true;
+  await grabadora.cerrar();
+  pintar();
+}
+for (const b of ["cancelar3", "cancelar5"]) $(b).onclick = () => { if (cancelar) cancelar.pedido = true; };
+
+$("ajustar").onclick = async () => {
+  empezarMedida("cancelar3");
+  try {
+    if (!await prepararMedida(FABRICA)) return;
+    const r = await ajustarNivel(serie, grabadora, {
+      canal: $("canal").value, fmin: fmin(), nivel: E.nivelListo ? dbfs() : -40, cancelar,
+      alIntento: (x) => { $("estadoNivel").textContent = t("intento", fmt(x.nivel, 0), fmt(x.pico)); $("dbfs").value = x.nivel; },
+    });
+    $("dbfs").value = r.nivel;
+    E.nivelListo = !r.motivo;
+    $("estadoNivel").textContent = r.motivo === "cancelado" ? t("cancelada") : r.motivo ? t(r.motivo) : t("nivelOk", fmt(r.nivel, 0), fmt(r.pico));
+    recordar(); comandos();
+  } catch (e) {
+    $("estadoNivel").textContent = errorMedida(e);
+  } finally { await acabarMedida("cancelar3"); }
+};
+
+function errorMedida(e) {
+  const m = String(e.message);
+  if (m === "orden parar") return t("cancelada");
+  return t("fallida", m === "cortes" ? t("cortes") : m);
+}
+
+function enlace(id, g, nombre) {
+  const a = $(id);
+  if (a.href) URL.revokeObjectURL(a.href);
+  a.href = URL.createObjectURL(new Blob([wav(g)], { type: "audio/wav" }));
+  a.download = nombre + ".wav";
+  a.textContent = t("descargar");
+  a.hidden = false;
+}
+
+async function medirYAnalizar({ ajustesNecesarios, boton, progreso, estado, descarga, nombre, alTerminar }) {
+  empezarMedida(boton);
+  $(progreso).hidden = false; $(progreso).value = 0;
+  try {
+    if (!await prepararMedida(ajustesNecesarios)) return;
+    $(estado).textContent = t("midiendo");
+    const g = await grabar(serie, grabadora, { orden: "medir", canal: $("canal").value, nivel: dbfs(), fmin: fmin(), cancelar,
+      alAvanzar: (x) => { $(progreso).value = x; } });
+    enlace(descarga, g, nombre);
+    await grabadora.cerrar();
+    salida = estado;
+    const m = await analizar(wav(g), fmin());
+    $(estado).textContent = t("hecho", fmt(m.ms / 1000, 1)) + ` (${t("nivelEs", dbfs())}, pico ${fmt(niveles(g).pico)} dBFS)`;
+    alTerminar(m.datos);
+  } catch (e) {
+    $(estado).textContent = errorMedida(e);
+  } finally {
+    $(progreso).hidden = true;
+    await acabarMedida(boton);
+  }
+}
+
+$("medir").onclick = () => medirYAnalizar({ ajustesNecesarios: FABRICA, boton: "cancelar3", progreso: "progreso3", estado: "estado",
+  descarga: "descarga3", nombre: base(), alTerminar: (d) => {
+    E.datos = d; E.verif = null; E.probada = null;
+    E.elegida = Math.max(0, d.opciones.findIndex((o) => o.recomendada));
+  } });
+$("medir5").onclick = () => medirYAnalizar({ ajustesNecesarios: ajustesElegidos(), boton: "cancelar5", progreso: "progreso5", estado: "estado5",
+  descarga: "descarga5", nombre: base() + "_verif", alTerminar: (d) => { E.verif = d; } });
+for (const b of ["soltar3", "soltar5"]) $(b).onclick = async () => { await soltar(); pintar(); };
+window.addEventListener("beforeunload", (e) => { if (E.midiendo) { serie.mandar("parar").catch(() => {}); e.preventDefault(); } });
+
 // Campo de nivel: se crea aquí para tenerlo junto a su explicación
 const campoNivel = document.createElement("label");
 campoNivel.className = "campo";
 campoNivel.innerHTML = `<span data-t="nivel"></span><span class="fila"><input type="number" id="dbfs" value="-30" min="-60" max="-6" step="1"> dBFS</span>`;
-$("cmdNivel").parentElement.after(campoNivel);
-$("dbfs").addEventListener("input", () => { recordar(); comandos(); });
+$("cmdNivel").parentElement.before(campoNivel);
+$("dbfs").addEventListener("input", () => { recordar(); comandos(); pintar(); });
 recuperar();
 traducir();
+listarMicros();

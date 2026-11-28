@@ -8,6 +8,7 @@ export class Serie {
     this.alCerrar = alCerrar;
     this.cola = Promise.resolve();
     this.espera = null;
+    this.oyentes = new Set();
     this.abierto = false;
   }
 
@@ -61,6 +62,7 @@ export class Serie {
     const e = this.espera;
     if (e && l.startsWith("error:")) { this.espera = null; e.mal(new Error(l)); }
     else if (e && e.vale(l)) { this.espera = null; e.bien(l); }
+    for (const o of [...this.oyentes]) if (o.vale(l)) { this.oyentes.delete(o); o.bien(l); }
     this.alRecibir(l);
   }
 
@@ -68,6 +70,28 @@ export class Serie {
     const e = this.espera;
     this.espera = null;
     e?.mal(new Error(motivo));
+    for (const o of [...this.oyentes]) { this.oyentes.delete(o); o.mal(new Error(motivo)); }
+  }
+
+  // Espera una línea que cumpla «vale», sin mandar nada (por ejemplo, el final
+  // de una medida). Falla si pasan «ms» o se cierra la conexión.
+  oir(vale, ms) {
+    return new Promise((bien, mal) => {
+      const o = { vale, bien: (l) => { clearTimeout(reloj); bien(l); }, mal: (e) => { clearTimeout(reloj); mal(e); } };
+      const reloj = setTimeout(() => { this.oyentes.delete(o); mal(new Error("sin respuesta")); }, ms);
+      this.oyentes.add(o);
+    });
+  }
+
+  // Manda una línea sin esperar respuesta (como «sigo» durante una medida)
+  mandar(texto) {
+    const tarea = this.cola.then(async () => {
+      if (!this.abierto) throw new Error("desconectado");
+      const w = this.puerto.writable.getWriter();
+      try { await w.write(new TextEncoder().encode(texto + "\n")); } finally { w.releaseLock(); }
+    });
+    this.cola = tarea.catch(() => {});
+    return tarea;
   }
 
   // Manda una orden y espera la línea que cumpla «vale» (por defecto, «ok ...»).

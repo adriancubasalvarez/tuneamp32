@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .claude/
 docs/analizar/_prueba*
+docs/asistente/_prueba*

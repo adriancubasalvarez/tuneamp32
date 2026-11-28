@@ -61,16 +61,30 @@
   <section class="tarjeta paso" data-paso="3" hidden>
     <h1 data-t="p3"></h1>
     <p data-t="p3Intro"></p>
-    <h2 data-t="p3a"></h2>
-    <p class="nota" data-t="p3aNota"></p>
-    <div class="copiar"><pre id="cmdNivel" class="orden"></pre><button class="copia" data-de="cmdNivel" data-t="copiar"></button></div>
+    <h2 data-t="p3m"></h2>
+    <div class="campos">
+      <label class="campo"><span data-t="micro"></span><select id="micro"></select></label>
+      <div class="campo"><span>&nbsp;</span><button id="permiso" data-t="permiso"></button></div>
+    </div>
+    <p id="estadoMicro" class="nota" role="status"></p>
+    <h2 data-t="p3n"></h2>
+    <p class="nota" data-t="p3nNota"></p>
+    <div class="barra"><button id="ajustar" data-t="ajustar"></button><span id="nivelActual" class="nota"></span></div>
+    <p id="estadoNivel" class="nota" role="status"></p>
     <h2 data-t="p3b"></h2>
     <p class="nota" data-t="p3bNota"></p>
-    <div class="copiar"><pre id="cmdMedir" class="orden"></pre><button class="copia" data-de="cmdMedir" data-t="copiar"></button></div>
-    <h2 data-t="p3c"></h2>
-    <p class="nota" id="dondeWav"></p>
-    <label class="campo"><span data-t="archivo"></span><input type="file" id="wav" accept=".wav,audio/wav"></label>
+    <div class="barra"><button id="medir" class="principal" data-t="medir"></button><button id="cancelar3" data-t="cancelarMedida" hidden></button>
+      <progress id="progreso3" max="1" value="0" hidden></progress></div>
     <p id="estado" class="nota" role="status"></p>
+    <p><a id="descarga3" class="nota" hidden></a></p>
+    <details class="manual"><summary data-t="manual"></summary>
+      <p class="nota" data-t="manualNota"></p>
+      <div class="barra"><button id="soltar3" data-t="soltar"></button></div>
+      <div class="copiar"><pre id="cmdNivel" class="orden"></pre><button class="copia" data-de="cmdNivel" data-t="copiar"></button></div>
+      <div class="copiar"><pre id="cmdMedir" class="orden"></pre><button class="copia" data-de="cmdMedir" data-t="copiar"></button></div>
+      <p class="nota" id="dondeWav"></p>
+      <label class="campo"><span data-t="archivo"></span><input type="file" id="wav" accept=".wav,audio/wav"></label>
+    </details>
   </section>
 
   <!-- 4. Elegir y probar -->
@@ -97,10 +111,17 @@
   <section class="tarjeta paso" data-paso="5" hidden>
     <h1 data-t="p5"></h1>
     <p data-t="p5Intro"></p>
-    <div class="copiar"><pre id="cmdVerificar" class="orden"></pre><button class="copia" data-de="cmdVerificar" data-t="copiar"></button></div>
-    <p class="nota" id="dondeWav5"></p>
-    <label class="campo"><span data-t="archivo"></span><input type="file" id="wav5" accept=".wav,audio/wav"></label>
+    <div class="barra"><button id="medir5" class="principal" data-t="medirOtra"></button><button id="cancelar5" data-t="cancelarMedida" hidden></button>
+      <progress id="progreso5" max="1" value="0" hidden></progress></div>
     <p id="estado5" class="nota" role="status"></p>
+    <p><a id="descarga5" class="nota" hidden></a></p>
+    <details class="manual"><summary data-t="manual"></summary>
+      <p class="nota" data-t="manualNota"></p>
+      <div class="barra"><button id="soltar5" data-t="soltar"></button></div>
+      <div class="copiar"><pre id="cmdVerificar" class="orden"></pre><button class="copia" data-de="cmdVerificar" data-t="copiar"></button></div>
+      <p class="nota" id="dondeWav5"></p>
+      <label class="campo"><span data-t="archivo"></span><input type="file" id="wav5" accept=".wav,audio/wav"></label>
+    </details>
     <div id="verificacion" hidden>
       <p id="veredicto" class="resumen"></p>
       <div id="leyenda5" class="leyenda"></div>
