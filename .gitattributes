@@ -2,3 +2,5 @@
 *.3mf binary
 *.pdf binary
 *.png binary
+
+*.ttf binary

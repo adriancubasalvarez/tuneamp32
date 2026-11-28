@@ -6,6 +6,7 @@
 <title>TuneAmp32 · Cómo funciona</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="../panel/panel.css">
+<script src="../comun/marco.js"></script>
 <style>
   main { max-width: 820px; }
   h1 { font-size: 24px; } h2 { font-size: 18px; margin-bottom: 8px; }
@@ -216,8 +217,8 @@
     for (const a of document.querySelectorAll("article")) a.hidden = a.lang !== idioma;
     document.getElementById("idioma").textContent = idioma === "es" ? "English" : "Español";
     document.title = idioma === "es" ? "TuneAmp32 · Cómo funciona" : "TuneAmp32 · How it works";
-    document.getElementById("enlaceAsistente").textContent = idioma === "es" ? "Asistente" : "Assistant";
-    document.getElementById("enlaceAnalizar").textContent = idioma === "es" ? "Analizar" : "Analyze";
+    // los enlaces que el menú común sustituye pueden no existir ya
+    const enl = document.getElementById("enlaceAnalizar"); if (enl) enl.textContent = idioma === "es" ? "Analizar" : "Analyze";
   };
   document.getElementById("idioma").onclick = () => {
     idioma = idioma === "es" ? "en" : "es";

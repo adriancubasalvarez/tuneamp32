@@ -3,8 +3,114 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TuneAmp32</title>
-<meta http-equiv="refresh" content="0; url=asistente/">
+<title>TuneAmp32 · Tu amplificador, afinado a tus altavoces</title>
+<meta name="description" content="Amplificador Bluetooth con ESP32 que mide tus altavoces, propone la corrección y comprueba el resultado, todo desde el navegador.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0e10'/%3E%3Cpath d='M6 23 C8.5 21 10 16 14 16 H26' fill='none' stroke='%23f2a541' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="panel/panel.css">
+<link rel="stylesheet" href="inicio/inicio.css">
+<script src="comun/marco.js"></script>
 </head>
-<body><p><a href="asistente/">TuneAmp32 · Asistente</a></p></body>
+<body>
+<header>
+  <div class="marca">TuneAmp32</div>
+  <div class="acciones"><button id="idioma">English</button></div>
+</header>
+
+<main class="inicio">
+  <section class="heroe">
+    <div class="heroe-texto">
+      <p class="antetitulo" data-es="Amplificador Bluetooth con ESP32 · código abierto" data-en="ESP32 Bluetooth amplifier · open source"></p>
+      <h1 data-es="Tu amplificador, afinado a tus altavoces." data-en="Your amplifier, tuned to your speakers."></h1>
+      <p class="entrada" data-es="Mide con un micrófono barato, deja que TuneAmp32 calcule la corrección y comprueba el resultado. Todo desde el navegador, sin programas ni cuentas." data-en="Measure with an inexpensive microphone, let TuneAmp32 work out the correction and check the result. All from the browser, no software, no accounts."></p>
+      <div class="ctas">
+        <a class="boton principal" href="asistente/" data-es="Empezar a afinar" data-en="Start tuning"></a>
+        <a class="boton" href="instalar/" data-es="Instalar el firmware" data-en="Install the firmware"></a>
+      </div>
+    </div>
+
+    <figure class="tarjeta curva">
+      <div class="curva-cabecera">
+        <div class="interruptor" role="radiogroup" aria-label="Antes / después">
+          <button type="button" role="radio" id="verAntes" data-es="Antes" data-en="Before"></button>
+          <button type="button" role="radio" id="verDespues" data-es="Después" data-en="After"></button>
+        </div>
+        <span class="medida-real" data-es="Medida real" data-en="Real measurement"></span>
+      </div>
+      <svg id="curva" role="img" viewBox="0 0 600 300"></svg>
+      <div class="cifras">
+        <div><span data-es="Joroba en el grave" data-en="Bass hump"></span><b id="cJoroba"></b></div>
+        <div><span data-es="Grave hasta" data-en="Bass down to"></span><b id="cF3"></b></div>
+      </div>
+      <figcaption class="nota" data-es="JVC CS-J520X en altavoz de gota, sin corrección y con la propuesta automática de TuneAmp32, medida de nuevo con el micrófono." data-en="JVC CS-J520X in a teardrop pod, without correction and with TuneAmp32's automatic proposal, measured again with the microphone."></figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2 class="seccion" data-es="Mide · Corrige · Verifica" data-en="Measure · Correct · Verify"></h2>
+    <div class="pasos3">
+      <article class="tarjeta">
+        <span class="num">01</span>
+        <h3 data-es="Mide" data-en="Measure"></h3>
+        <p data-es="El ESP32 hace sonar unos barridos y el navegador los graba con el micrófono pegado al cono. El nivel se ajusta solo." data-en="The ESP32 plays some sweeps and the browser records them with the microphone next to the cone. The level sets itself."></p>
+      </article>
+      <article class="tarjeta">
+        <span class="num">02</span>
+        <h3 data-es="Corrige" data-en="Correct"></h3>
+        <p data-es="TuneAmp32 encuentra la resonancia y la caída del grave de tu altavoz y te propone varias correcciones, cada una con su curva prevista y su protección." data-en="TuneAmp32 finds your speaker's resonance and bass roll-off and proposes several corrections, each with its predicted curve and protection."></p>
+      </article>
+      <article class="tarjeta">
+        <span class="num">03</span>
+        <h3 data-es="Verifica" data-en="Verify"></h3>
+        <p data-es="La pruebas con música, vuelves a medir y ves el antes y el después. Si te gusta, se queda guardada en el amplificador." data-en="Try it with music, measure again and see before and after. If you like it, it stays saved in the amplifier."></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="tarjeta">
+    <h2 class="seccion" data-es="El ciclo completo, en un solo aparato" data-en="The full cycle, in one device"></h2>
+    <p class="nota" data-es="Otras placas con procesador de audio te dan el ecualizador, pero la medida y el diseño de la corrección corren de tu cuenta." data-en="Other audio-processor boards give you the equalizer, but measuring and designing the correction is up to you."></p>
+    <div class="desliza">
+      <table class="comparar">
+        <thead><tr><th></th><th class="nuestro">TuneAmp32</th><th>Wondom JAB5<br><small>ADAU1701</small></th><th>Louder-ESP32</th><th>miniDSP 2x4 HD</th></tr></thead>
+        <tbody>
+          <tr><th data-es="Precio aproximado" data-en="Approximate price"></th><td class="nuestro" data-es="25–30 € de electrónica" data-en="€25–30 of parts"></td><td>~70 €</td><td>~24 $</td><td>~270 €</td></tr>
+          <tr><th data-es="Corrección por DSP" data-en="DSP correction"></th><td class="nuestro">✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><th data-es="Mide el altavoz" data-en="Measures the speaker"></th><td class="nuestro">✓</td><td data-es="Aparte (REW)" data-en="Separately (REW)"></td><td>—</td><td data-es="Aparte" data-en="Separately"></td></tr>
+          <tr><th data-es="Propone la corrección" data-en="Proposes the correction"></th><td class="nuestro">✓</td><td data-es="A mano (SigmaStudio)" data-en="By hand (SigmaStudio)"></td><td>—</td><td data-es="A mano" data-en="By hand"></td></tr>
+          <tr><th data-es="Verifica el resultado" data-en="Verifies the result"></th><td class="nuestro">✓</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota" data-es="Comparación orientativa del autor. Los precios son aproximados." data-en="Author's rough comparison. Prices are approximate."></p>
+  </section>
+
+  <section class="dos">
+    <div class="tarjeta">
+      <h2 class="seccion" data-es="Lo que necesitas" data-en="What you need"></h2>
+      <ul class="lista-piezas">
+        <li><b>ESP32 DevKit</b> <span data-es="30 pines, ESP32-WROOM-32" data-en="30-pin, ESP32-WROOM-32"></span></li>
+        <li><b>DAC PCM5102A</b> <span data-es="placa GY-PCM5102" data-en="GY-PCM5102 board"></span></li>
+        <li><b>TPA3116D2</b> <span data-es="amplificador estéreo" data-en="stereo amplifier"></span></li>
+        <li><b data-es="Fuente de 24 V" data-en="24 V power supply"></b> <span data-es="y un reductor a USB-C" data-en="and a USB-C step-down"></span></li>
+        <li><b data-es="Micrófono USB" data-en="USB microphone"></b> <span data-es="para medir (por ejemplo, DJI Mic)" data-en="for measuring (e.g. DJI Mic)"></span></li>
+      </ul>
+      <p class="nota"><a href="https://github.com/adriancubasalvarez/tuneamp32/tree/main/hardware" data-es="Conexiones y montaje" data-en="Wiring and assembly"></a></p>
+    </div>
+    <div class="tarjeta ejemplo">
+      <img src="inicio/gota.png" alt="" width="160" height="160">
+      <div>
+        <h2 class="seccion" data-es="Ejemplo 1: altavoz de gota" data-en="Example 1: teardrop speaker"></h2>
+        <p data-es="Cápsula impresa en 3D para el JVC CS-J520X, diseñada por Adrián. Su perfil está listo para cargar en el panel, y los archivos 3D, en el repositorio." data-en="3D-printed pod for the JVC CS-J520X, designed by Adrián. Its profile is ready to load in the panel, and the 3D files are in the repository."></p>
+        <p class="nota"><a href="https://github.com/adriancubasalvarez/tuneamp32/tree/main/carcasa/altavoz_gota_jvc" data-es="Archivos 3D" data-en="3D files"></a> · <a href="panel/" data-es="Abrir en el panel" data-en="Open in the panel"></a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <span>TuneAmp<b>32</b> · <a href="https://github.com/adriancubasalvarez/tuneamp32">GitHub</a></span>
+    <span data-es="Código GPL-3.0 · Contenido CC BY-NC-SA 4.0 · Nace de Radio Mundial" data-en="Code GPL-3.0 · Content CC BY-NC-SA 4.0 · Born from Radio Mundial"></span>
+  </footer>
+</main>
+<script type="module" src="inicio/inicio.js"></script>
+</body>
 </html>

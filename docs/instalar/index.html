@@ -6,6 +6,7 @@
 <title>TuneAmp32 · Instalar</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="../panel/panel.css">
+<script src="../comun/marco.js"></script>
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 <style>
   main { max-width: 820px; }
@@ -106,8 +107,6 @@
     const es = idioma === "es";
     document.getElementById("idioma").textContent = es ? "English" : "Español";
     document.getElementById("titulo").textContent = es ? "· Instalar" : "· Install";
-    document.getElementById("enAsistente").textContent = es ? "Asistente" : "Assistant";
-    document.getElementById("enAyuda").textContent = es ? "Cómo funciona" : "How it works";
     document.title = es ? "TuneAmp32 · Instalar" : "TuneAmp32 · Install";
   };
   document.getElementById("idioma").onclick = () => {
