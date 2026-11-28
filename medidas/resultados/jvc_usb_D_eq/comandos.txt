@@ -1,0 +1,5 @@
+ganancia -7.0
+pasoalto 66
+joroba 167 -9.1 1.77
+grave 91 9.0 1.93
+dsp on

@@ -1,0 +1,36 @@
+{
+  "nombre": "jvc_usb_D_w2a",
+  "tipo": "cerca",
+  "archivo": "D:\\TUNEAMP32\\medidas\\grabaciones\\jvc_usb_D_w2a.wav",
+  "canal": 0,
+  "fs": 48000,
+  "pico_dbfs": -15.252670075428929,
+  "deriva_ppm": -30.30305989593085,
+  "snr_db": 56.09861570247362,
+  "f_min": 30.0,
+  "f_max": 1000.0,
+  "ventana_ms": 150.0,
+  "caja": {
+    "fc": 145.67141071217983,
+    "qtc": 1.47,
+    "ganancia": -17.88429139540398,
+    "error_db": 2.757894979748242,
+    "f_lo": 50.0,
+    "f_hi": 600.0,
+    "desplaz_db": -1.8126630358558806
+  },
+  "cortes": {
+    "F3": 90.1456620123511,
+    "F6": 80.56341005370132,
+    "F10": 74.09571444095502
+  },
+  "avisos": [],
+  "joroba": null,
+  "rebotes_db": -24.52721905750279,
+  "reflex": null,
+  "f_distorsion": null,
+  "zona_ref": [
+    250.0,
+    600.0
+  ]
+}

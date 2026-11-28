@@ -12,6 +12,8 @@ inexpensive wireless microphone (DJI Mic) and the Bluetooth test rig
 | `procedimiento.py` | Creates `PROCEDIMIENTO_MEDIDAS.pdf`, the step-by-step measuring guide (Spanish). |
 | `analizar.py` | Analyses one recording: frequency response (1/6 octave), sealed-box fit (fc, Qtc), F3/F6/F10, Linkwitz-transform EQ table, harmonic distortion vs frequency, and THD/THD+N of the bass tones. Writes a PDF report, PNG plots and CSV data to `resultados/<name>/`. |
 | `medir.py` | Measures straight from a PC: plays the session over Bluetooth to the ESP32 while recording the DJI Mic receiver over USB, then analyses it (`pip install sounddevice`). `--nivel` checks the level, `--atenuacion` lowers the signal from the PC if the mic clips. |
+| `disenar_eq.py` | Proposes the correction for **any speaker** from a near-field measurement: several options (hump only, bass +3/+6/+9 dB), each with its predicted curve, protective high-pass and a ★ recommendation. Saves commands and a panel profile. The maths lives in `propuesta.py`, the analysis in `analisis.py` (both numpy only, for the web). |
+| `pruebas_propuesta.py` | Tests with simulated speakers (sealed, small, bass reflex, distortion, mic too far…), including measure → correct → verify. |
 | `comparar.py` | Overlays several measurements, or splices a near-field and a 50 cm gated measurement into one 20 Hz–20 kHz curve. |
 
 ```bash
@@ -52,6 +54,8 @@ micrófono inalámbrico barato (DJI Mic) y el montaje Bluetooth de prueba
 | `procedimiento.py` | Crea `PROCEDIMIENTO_MEDIDAS.pdf`, la guía paso a paso para medir. |
 | `analizar.py` | Analiza una grabación: respuesta en frecuencia (1/6 de octava), ajuste de caja cerrada (fc, Qtc), F3/F6/F10, tabla de ecualización (transformada de Linkwitz), distorsión armónica según la frecuencia y THD/THD+N de los tonos graves. Deja un informe PDF, gráficos PNG y datos CSV en `resultados/<nombre>/`. |
 | `medir.py` | Mide directamente desde el PC: reproduce la sesión por Bluetooth hacia el ESP32 mientras graba el receptor del DJI Mic por USB, y la analiza (`pip install sounddevice`). `--nivel` comprueba el volumen y `--atenuacion` baja la señal desde el PC si el micrófono satura. |
+| `disenar_eq.py` | Propone la corrección de **cualquier altavoz** a partir de una medida en campo cercano: varias opciones (solo la joroba, grave +3/+6/+9 dB), cada una con su curva prevista, paso alto de protección y una recomendada (★). Guarda los comandos y un perfil para el panel. Los cálculos están en `propuesta.py` y el análisis en `analisis.py` (solo numpy, para la web). |
+| `pruebas_propuesta.py` | Pruebas con altavoces simulados (caja cerrada, pequeño, bass reflex, distorsión, micro lejos…), incluido medir → corregir → verificar. |
 | `comparar.py` | Superpone varias medidas, o une la de campo cercano con la de 50 cm en una curva de 20 Hz a 20 kHz. |
 
 **Por USB, sin Bluetooth en el PC.** El ESP32 genera la señal (empieza bajo):

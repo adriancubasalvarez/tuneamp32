@@ -1,0 +1,42 @@
+{
+  "medida": "jvc_usb_D",
+  "diagnostico": {
+    "fc": 173.42285968235691,
+    "f_min": 30.0,
+    "f_ref_alta": 606.9800088882492,
+    "joroba": {
+      "f": 171.9797343873114,
+      "db": 6.984481243365444
+    },
+    "f3": 115.65288080495874,
+    "f6": 106.99911450676015,
+    "f10": 91.77805463126288,
+    "f_distorsion": null,
+    "reflex": null
+  },
+  "opcion": {
+    "refuerzo_db": 6,
+    "nombre": "Grave +6 dB",
+    "ajustes": {
+      "dsp": true,
+      "limitador": true,
+      "gravesmax": -6.0,
+      "techo": -1.0,
+      "pasoalto": 66.0,
+      "joroba_f": 167.0,
+      "joroba_db": -9.1,
+      "joroba_q": 1.77,
+      "grave_f": 91.0,
+      "grave_db": 9.0,
+      "grave_q": 1.93,
+      "ganancia": -7.0
+    },
+    "error_db": 0.87,
+    "f3_prevista": 94.29890643762384,
+    "joroba_prevista_db": 0.9,
+    "refuerzo_max_db": 6.3,
+    "potencia_x": 4.3,
+    "desaconsejada": [],
+    "recomendada": true
+  }
+}

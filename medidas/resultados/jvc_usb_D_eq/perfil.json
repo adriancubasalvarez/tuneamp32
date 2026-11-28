@@ -1,0 +1,19 @@
+{
+  "formato": "tuneamp32-perfil",
+  "version": 1,
+  "nombre": "jvc_usb_D — Grave +6 dB",
+  "ajustes": {
+    "dsp": true,
+    "limitador": true,
+    "gravesmax": -6.0,
+    "techo": -1.0,
+    "pasoalto": 66.0,
+    "joroba_f": 167.0,
+    "joroba_db": -9.1,
+    "joroba_q": 1.77,
+    "grave_f": 91.0,
+    "grave_db": 9.0,
+    "grave_q": 1.93,
+    "ganancia": -7.0
+  }
+}
