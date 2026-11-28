@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneAmp32 · Asistente</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../panel/panel.css">
+<link rel="stylesheet" href="../analizar/analizar.css">
+<link rel="stylesheet" href="asistente.css">
+</head>
+<body>
+<header>
+  <div class="marca">TuneAmp32 <span data-t="titulo"></span></div>
+  <div class="acciones">
+    <span id="conexion" class="chip" role="status"></span>
+    <a class="boton" href="../panel/" data-t="panel"></a>
+    <a class="boton" href="../ayuda/" data-t="ayuda"></a>
+    <button id="idioma"></button>
+  </div>
+</header>
+
+<main>
+  <ol id="pasos" class="pasos"></ol>
+  <p id="aviso" class="aviso" role="alert" hidden></p>
+
+  <!-- 1. Preparar -->
+  <section class="tarjeta paso" data-paso="1">
+    <h1 data-t="p1"></h1>
+    <p data-t="p1Intro"></p>
+    <div class="campos">
+      <label class="campo"><span data-t="nombre"></span><input type="text" id="nombre" maxlength="40" autocomplete="off"></label>
+      <label class="campo"><span data-t="canal"></span>
+        <select id="canal"><option value="I" data-t="izquierdo"></option><option value="D" data-t="derecho"></option></select></label>
+      <label class="campo"><span data-t="tamano"></span>
+        <select id="tamano">
+          <option value="80" data-t="pequeno"></option>
+          <option value="40" data-t="mediano" selected></option>
+          <option value="20" data-t="grande"></option>
+        </select></label>
+    </div>
+    <p class="nota" data-t="notaTamano"></p>
+    <ul class="lista">
+      <li><label class="check"><input type="checkbox" class="hecho"> <span data-t="c1"></span></label></li>
+      <li><label class="check"><input type="checkbox" class="hecho"> <span data-t="c2"></span></label></li>
+      <li><label class="check"><input type="checkbox" class="hecho"> <span data-t="c3"></span></label></li>
+      <li><label class="check"><input type="checkbox" class="hecho"> <span data-t="c4"></span></label></li>
+    </ul>
+  </section>
+
+  <!-- 2. Conectar y dejar sin corrección -->
+  <section class="tarjeta paso" data-paso="2" hidden>
+    <h1 data-t="p2"></h1>
+    <p data-t="p2Intro"></p>
+    <div class="barra"><button id="conectar" class="principal" data-t="conectar"></button></div>
+    <p id="estadoPlaca2" class="nota" role="status"></p>
+    <p class="nota" data-t="p2Nota"></p>
+  </section>
+
+  <!-- 3. Medir -->
+  <section class="tarjeta paso" data-paso="3" hidden>
+    <h1 data-t="p3"></h1>
+    <p data-t="p3Intro"></p>
+    <h2 data-t="p3a"></h2>
+    <p class="nota" data-t="p3aNota"></p>
+    <div class="copiar"><pre id="cmdNivel" class="orden"></pre><button class="copia" data-de="cmdNivel" data-t="copiar"></button></div>
+    <h2 data-t="p3b"></h2>
+    <p class="nota" data-t="p3bNota"></p>
+    <div class="copiar"><pre id="cmdMedir" class="orden"></pre><button class="copia" data-de="cmdMedir" data-t="copiar"></button></div>
+    <h2 data-t="p3c"></h2>
+    <p class="nota" id="dondeWav"></p>
+    <label class="campo"><span data-t="archivo"></span><input type="file" id="wav" accept=".wav,audio/wav"></label>
+    <p id="estado" class="nota" role="status"></p>
+  </section>
+
+  <!-- 4. Elegir y probar -->
+  <section class="tarjeta paso" data-paso="4" hidden>
+    <h1 data-t="p4"></h1>
+    <p id="resumen" class="resumen"></p>
+    <ul id="avisos" class="avisos"></ul>
+    <details><summary data-t="detalles"></summary><dl id="diagnostico" class="datos"></dl></details>
+    <h2 data-t="p4a"></h2>
+    <div id="opciones" class="opciones" role="radiogroup"></div>
+    <div id="leyenda4" class="leyenda"></div>
+    <div class="marco"><svg id="grafico4" role="img"></svg></div>
+    <h2 data-t="p4b"></h2>
+    <p class="nota" data-t="p4bNota"></p>
+    <div class="barra">
+      <button id="reconectar4" data-t="reconectar"></button>
+      <button id="probar" class="principal" data-t="probar"></button>
+      <button id="quitar" data-t="quitar"></button>
+    </div>
+    <p id="estadoPlaca4" class="nota" role="status"></p>
+  </section>
+
+  <!-- 5. Verificar -->
+  <section class="tarjeta paso" data-paso="5" hidden>
+    <h1 data-t="p5"></h1>
+    <p data-t="p5Intro"></p>
+    <div class="copiar"><pre id="cmdVerificar" class="orden"></pre><button class="copia" data-de="cmdVerificar" data-t="copiar"></button></div>
+    <p class="nota" id="dondeWav5"></p>
+    <label class="campo"><span data-t="archivo"></span><input type="file" id="wav5" accept=".wav,audio/wav"></label>
+    <p id="estado5" class="nota" role="status"></p>
+    <div id="verificacion" hidden>
+      <p id="veredicto" class="resumen"></p>
+      <div id="leyenda5" class="leyenda"></div>
+      <div class="marco"><svg id="grafico5" role="img"></svg></div>
+    </div>
+  </section>
+
+  <!-- 6. Guardar -->
+  <section class="tarjeta paso" data-paso="6" hidden>
+    <h1 data-t="p6"></h1>
+    <p data-t="p6Intro"></p>
+    <div class="barra">
+      <button id="reconectar6" data-t="reconectar"></button>
+      <button id="guardar" class="principal" data-t="guardar"></button>
+      <button id="bajar" data-t="bajar"></button>
+    </div>
+    <p id="estadoPlaca6" class="nota" role="status"></p>
+    <p class="nota" data-t="p6Nota"></p>
+  </section>
+
+  <nav class="tarjeta barra navegacion">
+    <button id="atras" data-t="atras"></button>
+    <span class="separa"></span>
+    <span id="falta" class="nota"></span>
+    <button id="siguiente" class="principal" data-t="siguiente"></button>
+  </nav>
+</main>
+
+<dialog id="dialogo">
+  <p id="pregunta"></p>
+  <div class="barra"><button id="no" data-t="cancelar"></button><button id="si" class="principal" data-t="continuar"></button></div>
+</dialog>
+<script type="module" src="asistente.js"></script>
+</body>
+</html>

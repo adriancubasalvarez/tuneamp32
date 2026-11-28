@@ -26,7 +26,7 @@
 <body>
 <header>
   <div class="marca">TuneAmp32</div>
-  <div class="acciones"><a class="boton" href="../panel/">Panel</a><a class="boton" href="../analizar/" id="enlaceAnalizar">Analizar</a><button id="idioma">English</button></div>
+  <div class="acciones"><a class="boton" href="../asistente/" id="enlaceAsistente">Asistente</a><a class="boton" href="../panel/">Panel</a><a class="boton" href="../analizar/" id="enlaceAnalizar">Analizar</a><button id="idioma">English</button></div>
 </header>
 <main>
 
@@ -70,7 +70,7 @@
   <section class="tarjeta">
     <h2>Ajustar a oído con el panel</h2>
     <ol>
-      <li>Abre el <a href="../panel/">panel</a> en Chrome o Edge, en un ordenador.</li>
+      <li>Para medir y corregir paso a paso, usa el <a href="../asistente/">asistente</a>. Para ajustar a oído, abre el <a href="../panel/">panel</a> en Chrome o Edge, en un ordenador.</li>
       <li>Conecta el ESP32 por USB, pulsa <b>Conectar</b> y elige su puerto.</li>
       <li>Conecta el móvil a «TuneAmp32» por Bluetooth y pon música conocida, bajito.</li>
       <li>Mueve un mando. El cambio se oye al soltarlo.</li>
@@ -158,7 +158,7 @@
   <section class="tarjeta">
     <h2>Tuning by ear with the panel</h2>
     <ol>
-      <li>Open the <a href="../panel/">panel</a> in Chrome or Edge on a computer.</li>
+      <li>To measure and correct step by step, use the <a href="../asistente/">assistant</a>. To tune by ear, open the <a href="../panel/">panel</a> in Chrome or Edge on a computer.</li>
       <li>Connect the ESP32 over USB, press <b>Connect</b> and choose its port.</li>
       <li>Connect your phone to "TuneAmp32" over Bluetooth and play familiar music, quietly.</li>
       <li>Move a control. You hear the change when you release it.</li>
@@ -216,6 +216,7 @@
     for (const a of document.querySelectorAll("article")) a.hidden = a.lang !== idioma;
     document.getElementById("idioma").textContent = idioma === "es" ? "English" : "Español";
     document.title = idioma === "es" ? "TuneAmp32 · Cómo funciona" : "TuneAmp32 · How it works";
+    document.getElementById("enlaceAsistente").textContent = idioma === "es" ? "Asistente" : "Assistant";
     document.getElementById("enlaceAnalizar").textContent = idioma === "es" ? "Analizar" : "Analyze";
   };
   document.getElementById("idioma").onclick = () => {

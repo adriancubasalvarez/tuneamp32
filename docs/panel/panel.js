@@ -9,7 +9,7 @@ const REFUERZO_AVISO = 6;                 // dB: por encima se pide confirmació
 // ------------------------------------------------------------------ textos
 const T = {
   es: {
-    panel: "· Panel", otro: "English", analizar: "Analizar", ayuda: "Cómo funciona", queEs: "Qué es", conectar: "Conectar", desconectar: "Desconectar",
+    panel: "· Panel", otro: "English", asistente: "Asistente", analizar: "Analizar", ayuda: "Cómo funciona", queEs: "Qué es", conectar: "Conectar", desconectar: "Desconectar",
     conectado: "Conectado", sin: "Sin conectar", curva: "Curva de corrección",
     ejemplos: "Ejemplos", elige: "Elige un ejemplo…", verMedida: "Ver la medida del ejemplo", medida: "Medida", correccion: "Corrección", prevista: "Prevista",
     notaCurva: "Niveles relativos, sin la ganancia previa y con el refuerzo de grave completo. Los ejemplos son para ese altavoz concreto: en otro pueden sonar mal o dañarlo.",
@@ -33,7 +33,7 @@ const T = {
     margenBien: (x) => `Margen: ${x} dB antes de llegar al máximo digital.`,
   },
   en: {
-    panel: "· Panel", otro: "Español", analizar: "Analyze", ayuda: "How it works", queEs: "What is", conectar: "Connect", desconectar: "Disconnect",
+    panel: "· Panel", otro: "Español", asistente: "Assistant", analizar: "Analyze", ayuda: "How it works", queEs: "What is", conectar: "Connect", desconectar: "Disconnect",
     conectado: "Connected", sin: "Not connected", curva: "Correction curve",
     ejemplos: "Examples", elige: "Choose an example…", verMedida: "Show the example measurement", medida: "Measured", correccion: "Correction", prevista: "Predicted",
     notaCurva: "Relative levels, without pre-gain and with full bass boost. Examples are for that exact speaker: on another one they may sound bad or damage it.",

@@ -7,7 +7,7 @@ const REFUERZO_AVISO = 6;
 // ------------------------------------------------------------------ textos
 const T = {
   es: {
-    titulo: "· Analizar", otro: "English", panel: "Panel", ayuda: "Cómo funciona",
+    titulo: "· Analizar", otro: "English", asistente: "Asistente", panel: "Panel", ayuda: "Cómo funciona",
     conectar: "Conectar", desconectar: "Desconectar", conectado: "Conectado", sin: "Sin conectar",
     paso1: "1. Carga una medida", archivo: "Grabación (WAV)", fmin: "Frecuencia mínima de la medida",
     explica1: "Mide el altavoz con el micro a 1 cm del centro del cono. De momento la medida se hace desde el PC, con la placa conectada por USB:",
@@ -35,7 +35,7 @@ const T = {
     noSerie: "Este navegador no tiene Web Serial: puedes analizar, pero para probar en el altavoz usa Chrome o Edge en un ordenador.",
   },
   en: {
-    titulo: "· Analyze", otro: "Español", panel: "Panel", ayuda: "How it works",
+    titulo: "· Analyze", otro: "Español", asistente: "Assistant", panel: "Panel", ayuda: "How it works",
     conectar: "Connect", desconectar: "Disconnect", conectado: "Connected", sin: "Not connected",
     paso1: "1. Load a measurement", archivo: "Recording (WAV)", fmin: "Lowest frequency of the measurement",
     explica1: "Measure the speaker with the mic 1 cm from the centre of the cone. For now the measurement is made from the PC, with the board on USB:",

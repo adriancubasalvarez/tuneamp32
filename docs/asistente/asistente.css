@@ -1,0 +1,16 @@
+h1 { font-size: 20px; margin-bottom: 6px; } h2 { font-size: 15px; margin: 18px 0 2px; }
+.paso p { margin: 6px 0 0; }
+.pasos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.pasos li { flex: 1 1 120px; min-width: 0; border: 1px solid var(--malla); border-radius: 8px; padding: 6px 10px;
+  font-size: 13px; color: var(--tinta2); background: var(--sup); }
+.pasos li b { display: block; font-size: 12px; font-weight: 600; }
+.pasos li.actual { border: 2px solid var(--accion); color: var(--tinta); padding: 5px 9px; }
+.pasos li.hecho { color: var(--tinta); } .pasos li.hecho b::after { content: " ✓"; color: var(--s3); }
+.lista { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 4px; }
+.copiar { display: flex; gap: 8px; align-items: flex-start; } .copiar .orden { flex: 1; min-width: 0; }
+.copiar button { margin-top: 8px; }
+.campo input[type=text], .campo select { font: inherit; padding: 5px 8px; border: 1px solid var(--eje); border-radius: 6px;
+  background: var(--fondo); color: var(--tinta); min-width: 0; }
+.resumen { font-size: 17px; }
+.marco { position: relative; } .marco svg { display: block; width: 100%; height: 340px; }
+.navegacion { position: sticky; bottom: 0; z-index: 1; }

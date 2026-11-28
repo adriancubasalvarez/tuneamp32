@@ -13,8 +13,13 @@ export class Serie {
 
   static disponible() { return "serial" in navigator; }
 
-  async abrir() {
-    this.puerto = await navigator.serial.requestPort();
+  // Puertos que el navegador ya ha autorizado antes (se reabren sin preguntar)
+  static async conocidos() {
+    try { return await navigator.serial.getPorts(); } catch { return []; }
+  }
+
+  async abrir(puerto = null) {
+    this.puerto = puerto ?? await navigator.serial.requestPort();
     await this.puerto.open({ baudRate: 115200 });
     // Primero RTS y luego DTR: en el otro orden, el circuito de reinicio
     // automático de la placa reiniciaría el ESP32 y cortaría el Bluetooth.
