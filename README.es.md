@@ -20,6 +20,14 @@ Amplificador Bluetooth con ESP32 que **se afina a tus altavoces**: medir con un 
 
 ¿Es tu primera vez? Lee [Cómo funciona](docs/ayuda/index.html) (ábrelo en el navegador).
 
+## Úsalo
+
+**👉 https://adriancubasalvarez.github.io/tuneamp32/** — Chrome o Edge en un ordenador.
+
+- **[Instalar](https://adriancubasalvarez.github.io/tuneamp32/instalar/)** el firmware en el ESP32, sin nada más.
+- **[Asistente](https://adriancubasalvarez.github.io/tuneamp32/asistente/)**: medir, elegir una corrección, probarla, verificarla y guardarla, paso a paso.
+- **[Panel](https://adriancubasalvarez.github.io/tuneamp32/panel/)**: ajuste fino a oído.
+
 ## Compilar
 
 - **PlatformIO:** `pio run -t upload` dentro de `firmware/tuneamp32`.

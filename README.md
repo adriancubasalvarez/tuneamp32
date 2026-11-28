@@ -20,6 +20,14 @@ An ESP32 Bluetooth amplifier that **tunes itself to your speakers**: measure wit
 
 New here? Read [How it works](docs/ayuda/index.html) (open it in your browser).
 
+## Use it
+
+**👉 https://adriancubasalvarez.github.io/tuneamp32/** — Chrome or Edge on a computer.
+
+- **[Install](https://adriancubasalvarez.github.io/tuneamp32/instalar/)** the firmware on the ESP32, nothing else needed.
+- **[Assistant](https://adriancubasalvarez.github.io/tuneamp32/asistente/)**: measure, choose a correction, try it, verify it and save it, step by step.
+- **[Panel](https://adriancubasalvarez.github.io/tuneamp32/panel/)**: fine-tune by ear.
+
 ## Build
 
 - **PlatformIO:** `pio run -t upload` inside `firmware/tuneamp32`.
