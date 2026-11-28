@@ -21,6 +21,7 @@
 #include "BluetoothA2DPSink.h"
 #include "dsp.h"
 #include "generador.h"
+#include "version.h"
 
 // Pines I2S: ninguno es de arranque (strapping) en el ESP32
 constexpr int PIN_BCK  = 26;  // reloj de bit
@@ -266,6 +267,7 @@ void ayuda() {
   Serial.println(
       "Comandos:\n"
       "  ver                     ajustes y estado desde la última consulta\n"
+      "  version                 version del firmware\n"
       "  estado                  picos, reducción del limitador y carga del procesador\n"
       "  dsp on | dsp off        corrección activada / solo ganancia previa y limitador\n"
       "  ganancia DB             ganancia previa (negativa, p. ej. -7)\n"
@@ -297,6 +299,9 @@ void orden(String linea) {
     return;
   } else if (s == "estado") {
     estado();
+    return;
+  } else if (s == "version") {
+    Serial.println("version " TUNEAMP32_VERSION);
     return;
   } else if (s == "ayuda" || s == "help") {
     ayuda();
@@ -363,6 +368,7 @@ void setup() {
   Serial.begin(115200);
   delay(200);
   Serial.println("\nTuneAmp32 - Bluetooth con DSP");
+  Serial.println("Version " TUNEAMP32_VERSION);
   cargarAjustes();
   dsp.preparar();
   xTaskCreatePinnedToCore(tareaMedida, "medida", 4096, nullptr, 5, &tarea_medida, 1);

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneAmp32 · Instalar</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../panel/panel.css">
+<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<style>
+  main { max-width: 820px; }
+  h1 { font-size: 24px; } h2 { font-size: 17px; margin-bottom: 6px; }
+  .tarjeta p, .tarjeta ol, .tarjeta ul { margin: 8px 0 0; } ol, ul { padding-left: 22px; } li { margin: 4px 0; }
+  .grande { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 14px; }
+  esp-web-install-button button[slot="activate"] { font: inherit; font-size: 17px; padding: 12px 22px; border-radius: 10px;
+    border: 1px solid var(--accion); background: var(--accion); color: var(--sobre); cursor: pointer; }
+  a { color: var(--accion); } a.boton { text-decoration: none; }
+  .version { color: var(--tinta2); font-size: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="marca">TuneAmp32 <span id="titulo">· Instalar</span></div>
+  <div class="acciones">
+    <a class="boton" href="../asistente/" id="enAsistente">Asistente</a>
+    <a class="boton" href="../ayuda/" id="enAyuda">Cómo funciona</a>
+    <button id="idioma">English</button>
+  </div>
+</header>
+<main>
+
+<article lang="es">
+  <section class="tarjeta">
+    <h1>Instala TuneAmp32 en tu ESP32</h1>
+    <p>Desde Chrome o Edge en un ordenador, sin instalar nada más. Sirve para un ESP32 clásico (ESP32-WROOM-32, DevKit de 30 pines) con el DAC PCM5102A.</p>
+    <div class="grande">
+      <esp-web-install-button manifest="../firmware/manifest.json">
+        <button slot="activate">Instalar en el ESP32</button>
+        <span slot="unsupported">Este navegador no puede instalar: usa Chrome o Edge en un ordenador.</span>
+        <span slot="not-allowed">La instalación necesita una conexión segura (https).</span>
+      </esp-web-install-button>
+      <span class="version">Versión <b class="v">…</b></span>
+    </div>
+  </section>
+  <section class="tarjeta">
+    <h2>Pasos</h2>
+    <ol>
+      <li>Conecta el ESP32 al ordenador con un cable USB de datos.</li>
+      <li>Cierra cualquier otra página o programa que use el puerto (el asistente, el panel o un monitor serie).</li>
+      <li>Pulsa <b>Instalar en el ESP32</b> y elige el puerto (suele llamarse CH340 o CP210x).</li>
+      <li>Si pregunta si quieres <b>borrar el dispositivo</b>, responde que no: así conservas la corrección guardada. Bórralo solo si quieres empezar de cero.</li>
+      <li>Espera a que termine (menos de un minuto) y abre el <a href="../asistente/">asistente</a>.</li>
+    </ol>
+  </section>
+  <section class="tarjeta">
+    <h2>Después de instalar</h2>
+    <ul>
+      <li>En el Bluetooth del móvil aparece <b>TuneAmp32</b>.</li>
+      <li>Si es la primera vez, sale de fábrica <b>sin corrección</b>: empieza con el volumen bajo.</li>
+      <li>Para afinarlo a tus altavoces, sigue el <a href="../asistente/">asistente</a>.</li>
+    </ul>
+  </section>
+</article>
+
+<article lang="en" hidden>
+  <section class="tarjeta">
+    <h1>Install TuneAmp32 on your ESP32</h1>
+    <p>From Chrome or Edge on a computer, with nothing else to install. For a classic ESP32 (ESP32-WROOM-32, 30-pin DevKit) with the PCM5102A DAC.</p>
+    <div class="grande">
+      <esp-web-install-button manifest="../firmware/manifest.json">
+        <button slot="activate">Install on the ESP32</button>
+        <span slot="unsupported">This browser cannot install: use Chrome or Edge on a computer.</span>
+        <span slot="not-allowed">Installing needs a secure connection (https).</span>
+      </esp-web-install-button>
+      <span class="version">Version <b class="v">…</b></span>
+    </div>
+  </section>
+  <section class="tarjeta">
+    <h2>Steps</h2>
+    <ol>
+      <li>Connect the ESP32 to the computer with a USB data cable.</li>
+      <li>Close any other page or program using the port (the assistant, the panel or a serial monitor).</li>
+      <li>Press <b>Install on the ESP32</b> and choose the port (usually named CH340 or CP210x).</li>
+      <li>If it asks whether to <b>erase the device</b>, answer no: that keeps your saved correction. Erase only to start from scratch.</li>
+      <li>Wait until it finishes (under a minute) and open the <a href="../asistente/">assistant</a>.</li>
+    </ol>
+  </section>
+  <section class="tarjeta">
+    <h2>After installing</h2>
+    <ul>
+      <li><b>TuneAmp32</b> appears in your phone's Bluetooth.</li>
+      <li>The first time, it comes <b>without correction</b>: start with the volume low.</li>
+      <li>To tune it to your speakers, follow the <a href="../asistente/">assistant</a>.</li>
+    </ul>
+  </section>
+</article>
+
+</main>
+<script>
+  let idioma = "es";
+  try { idioma = localStorage.getItem("idioma") || (navigator.language.startsWith("es") ? "es" : "en"); } catch { /* da igual */ }
+  if (idioma !== "en") idioma = "es";
+  const poner = () => {
+    document.documentElement.lang = idioma;
+    for (const a of document.querySelectorAll("article")) a.hidden = a.lang !== idioma;
+    const es = idioma === "es";
+    document.getElementById("idioma").textContent = es ? "English" : "Español";
+    document.getElementById("titulo").textContent = es ? "· Instalar" : "· Install";
+    document.getElementById("enAsistente").textContent = es ? "Asistente" : "Assistant";
+    document.getElementById("enAyuda").textContent = es ? "Cómo funciona" : "How it works";
+    document.title = es ? "TuneAmp32 · Instalar" : "TuneAmp32 · Install";
+  };
+  document.getElementById("idioma").onclick = () => {
+    idioma = idioma === "es" ? "en" : "es";
+    try { localStorage.setItem("idioma", idioma); } catch { /* da igual */ }
+    poner();
+  };
+  fetch("../firmware/manifest.json", { cache: "no-cache" }).then((r) => r.json())
+    .then((m) => document.querySelectorAll(".v").forEach((e) => { e.textContent = m.version; })).catch(() => {});
+  poner();
+</script>
+</body>
+</html>

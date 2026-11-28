@@ -1,0 +1,28 @@
+{
+  "name": "TuneAmp32",
+  "version": "0.1.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "tuneamp32-arranque.bin",
+          "offset": 4096
+        },
+        {
+          "path": "tuneamp32-particiones.bin",
+          "offset": 32768
+        },
+        {
+          "path": "tuneamp32-otadata.bin",
+          "offset": 57344
+        },
+        {
+          "path": "tuneamp32-programa.bin",
+          "offset": 65536
+        }
+      ]
+    }
+  ]
+}
